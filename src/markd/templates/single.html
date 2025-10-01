@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block title %}{{ filename }}{% endblock %}
+
+{% block body %}
+<div style="max-width: 800px; margin: 40px auto; padding: 0 20px;">
+    {% if show_back_link %}
+    <a href="/" style="display: inline-block; margin-bottom: 20px; color: #0066cc;">
+        ← Back to index
+    </a>
+    {% endif %}
+    
+    <div class="rendered-content">
+        {{ content | safe }}
+    </div>
+</div>
+{% endblock %}

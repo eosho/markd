@@ -1,0 +1,114 @@
+{% extends "base.html" %}
+
+{% block title %}Documentation{% endblock %}
+
+{% block extra_css %}
+<style>
+    body {
+        display: flex;
+        margin: 0;
+    }
+    
+    .sidebar {
+        width: 280px;
+        background: var(--sidebar-bg, #f8f9fa);
+        padding: 20px;
+        height: 100vh;
+        overflow-y: auto;
+        border-right: 1px solid var(--border-color, #e0e0e0);
+        position: sticky;
+        top: 0;
+    }
+    
+    .sidebar h2 {
+        margin-top: 0;
+        font-size: 1.5em;
+        color: var(--text-primary, #333);
+    }
+    
+    .sidebar ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+    
+    .sidebar li {
+        margin: 8px 0;
+    }
+    
+    .sidebar a {
+        color: var(--link-color, #0066cc);
+        text-decoration: none;
+        display: block;
+        padding: 6px 10px;
+        border-radius: 4px;
+        transition: background 0.2s;
+        cursor: pointer;
+        pointer-events: auto;
+    }
+    
+    .sidebar a:hover {
+        background: var(--bg-tertiary, #e9ecef);
+        text-decoration: none;
+    }
+    
+    .sidebar a.active {
+        background: var(--sidebar-active, #0066cc);
+        color: var(--text-primary, white);
+        font-weight: 500;
+    }
+    
+    .content {
+        flex: 1;
+        padding: 40px;
+        max-width: 800px;
+        margin: 0 auto;
+    }
+    
+    .directory-item {
+        margin-left: 20px;
+    }
+    
+    .directory-name {
+        font-weight: 600;
+        color: var(--text-secondary, #555);
+        margin: 10px 0 5px 0;
+    }
+</style>
+{% endblock %}
+
+{% block body %}
+<nav class="sidebar">
+    <h2>Files</h2>
+    <ul>
+        {% for file in files %}
+        <li>
+            <a href="/view/{{ file.path }}" {% if file.path == current_file %}class="active"{% endif %}>
+                {{ file.name }}
+            </a>
+        </li>
+        {% endfor %}
+        
+        {% for directory in directories %}
+        <div class="directory-item">
+            <div class="directory-name">📁 {{ directory.name }}</div>
+            <ul>
+                {% for file in directory.files %}
+                <li>
+                    <a href="/view/{{ directory.path }}/{{ file.name }}">
+                        {{ file.name }}
+                    </a>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% endfor %}
+    </ul>
+</nav>
+
+<main class="content">
+    <div class="rendered-content">
+        {{ content | safe }}
+    </div>
+</main>
+{% endblock %}
