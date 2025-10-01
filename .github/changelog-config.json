@@ -53,7 +53,7 @@
   "duplicate_filter": {
     "pattern": "\\[automation\\]",
     "on_property": "title",
-    "method": "match"
+    "method": "contains"
   },
   "transformers": [
     {
