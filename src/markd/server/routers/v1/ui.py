@@ -5,6 +5,7 @@ the root page, file viewing, and error pages.
 """
 
 import logging
+import time
 from pathlib import Path
 
 from fastapi import APIRouter, Depends, HTTPException, Request
@@ -23,6 +24,7 @@ from markd.server.dependencies import (
     get_theme,
     get_validation_root,
 )
+from markd.telemetry import track_error, track_render
 
 logger = logging.getLogger(__name__)
 
@@ -54,69 +56,90 @@ async def root(
     Returns:
         Rendered HTML page
     """
+    start_time = time.time()
     serve_path = config.serve_path
 
-    if serve_path.is_file():
-        # Single file mode
-        content = serve_path.read_text(encoding="utf-8")
+    try:
+        if serve_path.is_file():
+            # Single file mode
+            content = serve_path.read_text(encoding="utf-8")
+            rendered_html = renderer.render(content)
+
+            response = templates.TemplateResponse(
+                request=request,
+                name="single.html",
+                context={
+                    "filename": serve_path.name,
+                    "content": rendered_html,
+                    "show_back_link": False,
+                    "reload_enabled": reload_enabled,
+                    "theme": theme,
+                },
+            )
+
+            # Track successful render
+            render_time_ms = (time.time() - start_time) * 1000
+            track_render(render_time_ms)
+            return response
+
+        # Directory mode - find index.md or first .md file
+        md_files = sorted(serve_path.glob("*.md"))
+        if not md_files:
+            track_error()  # Track error for no markdown files
+            return templates.TemplateResponse(
+                request=request,
+                name="error.html",
+                context={
+                    "status_code": 404,
+                    "message": "No Markdown Files Found",
+                    "detail": "This directory doesn't contain any Markdown files.",
+                    "show_back": False,
+                    "reload_enabled": False,
+                    "theme": theme,
+                },
+            )
+
+        # Prefer index.md or README.md
+        index_file = None
+        for name in ["index.md", "README.md", "readme.md"]:
+            candidate = serve_path / name
+            if candidate.exists():
+                index_file = candidate
+                break
+
+        file_to_show = index_file or md_files[0]
+        content = file_to_show.read_text(encoding="utf-8")
         rendered_html = renderer.render(content)
 
-        return templates.TemplateResponse(
+        # Build file list for sidebar
+        files = [{"name": f.name, "path": f.name} for f in md_files]
+        directories = []  # Could scan subdirectories here
+
+        response = templates.TemplateResponse(
             request=request,
-            name="single.html",
+            name="directory.html",
             context={
-                "filename": serve_path.name,
                 "content": rendered_html,
-                "show_back_link": False,
+                "files": files,
+                "directories": directories,
+                "current_file": file_to_show.name,
                 "reload_enabled": reload_enabled,
                 "theme": theme,
             },
         )
 
-    # Directory mode - find index.md or first .md file
-    md_files = sorted(serve_path.glob("*.md"))
-    if not md_files:
-        return templates.TemplateResponse(
-            request=request,
-            name="error.html",
-            context={
-                "status_code": 404,
-                "message": "No Markdown Files Found",
-                "detail": "This directory doesn't contain any Markdown files.",
-                "show_back": False,
-                "reload_enabled": False,
-                "theme": theme,
-            },
-        )
+        # Track successful render
+        render_time_ms = (time.time() - start_time) * 1000
+        track_render(render_time_ms)
+        return response
 
-    # Prefer index.md or README.md
-    index_file = None
-    for name in ["index.md", "README.md", "readme.md"]:
-        candidate = serve_path / name
-        if candidate.exists():
-            index_file = candidate
-            break
-
-    file_to_show = index_file or md_files[0]
-    content = file_to_show.read_text(encoding="utf-8")
-    rendered_html = renderer.render(content)
-
-    # Build file list for sidebar
-    files = [{"name": f.name, "path": f.name} for f in md_files]
-    directories = []  # Could scan subdirectories here
-
-    return templates.TemplateResponse(
-        request=request,
-        name="directory.html",
-        context={
-            "content": rendered_html,
-            "files": files,
-            "directories": directories,
-            "current_file": file_to_show.name,
-            "reload_enabled": reload_enabled,
-            "theme": theme,
-        },
-    )
+    except Exception:
+        try:
+            track_error()  # Track any unexpected errors
+        except Exception:
+            logger.exception("track_error() failed in root endpoint")
+        logger.exception("Error in root endpoint")
+        raise
 
 
 @router.get("/view/{file_path:path}", response_class=HTMLResponse)
@@ -148,6 +171,8 @@ async def view_file(
     Raises:
         HTTPException: If file access is denied or not found
     """
+    start_time = time.time()
+
     try:
         # Validate path security
         requested = Path(file_path)
@@ -173,6 +198,7 @@ async def view_file(
                 f'overflow-x: auto;">{content}</pre>'
             )
         else:
+            track_error()  # Track unsupported file type error
             raise HTTPException(status_code=400, detail="Unsupported file type")
 
         # If serving a directory, show with sidebar; otherwise show single file
@@ -182,7 +208,7 @@ async def view_file(
             files = [{"name": f.name, "path": f.name} for f in md_files]
             directories = []  # Could scan subdirectories here
 
-            return templates.TemplateResponse(
+            response = templates.TemplateResponse(
                 request=request,
                 name="directory.html",
                 context={
@@ -195,7 +221,7 @@ async def view_file(
                 },
             )
         else:
-            return templates.TemplateResponse(
+            response = templates.TemplateResponse(
                 request=request,
                 name="single.html",
                 context={
@@ -207,7 +233,13 @@ async def view_file(
                 },
             )
 
+        # Track successful render
+        render_time_ms = (time.time() - start_time) * 1000
+        track_render(render_time_ms)
+        return response
+
     except SecurityError:
+        track_error()  # Track security error
         return templates.TemplateResponse(
             request=request,
             name="error.html",
@@ -222,6 +254,7 @@ async def view_file(
             status_code=403,
         )
     except FileNotFoundError:
+        track_error()  # Track file not found error
         return templates.TemplateResponse(
             request=request,
             name="error.html",
@@ -236,6 +269,7 @@ async def view_file(
             status_code=404,
         )
     except Exception as e:
+        track_error()  # Track any other errors
         logger.exception(f"Error viewing file {file_path}")
         return templates.TemplateResponse(
             request=request,
