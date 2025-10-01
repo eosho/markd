@@ -153,28 +153,6 @@ markd export docs/ site/ --theme dark
 markd export docs/ site/ --minify
 ```
 
-## 🎨 Themes
-
-markd includes two professionally designed themes:
-
-### Light Theme
-- Clean white background
-- High contrast for readability
-- Suitable for documentation and presentations
-
-### Dark Theme  
-- Easy on the eyes in low-light environments
-- OLED-friendly dark backgrounds
-- Syntax highlighting optimized for dark mode
-
-### Theme Toggle
-
-When using the web interface, you can toggle between themes using the button in the top-right corner:
-- **Light mode**: Shows 🌞 moon icon (click to switch to dark)
-- **Dark mode**: Shows 🌚 sun icon (click to switch to light)
-
-Your theme preference is saved in browser localStorage.
-
 ## 📝 Supported Markdown Features
 
 ### GitHub Flavored Markdown (GFM)
@@ -282,30 +260,6 @@ ruff check src/ tests/
 mypy src/
 ```
 
-### Project Structure
-
-See `specs/001-python-based-markdown/` for detailed design documents:
-- `plan.md` - Overall architecture and tech stack
-- `data-model.md` - Entity models and relationships
-- `contracts/` - API and CLI contracts
-- `tasks.md` - Implementation task breakdown
-
-## 📊 Performance
-
-### Benchmarks
-
-- **Rendering**: <100ms for files up to 100KB
-- **Reload Latency**: <200ms from file save to browser refresh
-- **Memory Usage**: <150MB for 100 files
-- **Cache Hit**: <1ms response time
-
-### Optimization Features
-
-- **Markdown Caching**: Rendered HTML is cached until file changes
-- **Static Asset Caching**: 1-year cache headers for CSS/JS
-- **Debounced Reloading**: 150ms debounce prevents reload spam
-- **Lazy Loading**: Only load visible content in directory mode
-
 ## 🐛 Troubleshooting
 
 ### Port Already in Use
@@ -333,28 +287,6 @@ markd README.md --port 8080
 1. Ensure CDN is accessible (requires internet connection)
 2. Check browser console for JavaScript errors
 3. Verify diagram syntax at [mermaid.live](https://mermaid.live)
-
-## 🤝 Contributing
-
-Contributions are welcome! Please read [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
-
-### Areas for Contribution
-
-- 📝 **Documentation**: Improve README, add tutorials
-- 🧪 **Testing**: Add unit tests (currently 17 missing)
-- 🎨 **Themes**: Create new color schemes
-- 🌍 **Internationalization**: Add translations
-- 🔌 **Plugins**: Extend Markdown functionality
-
-## 📄 License
-
-MIT License - see [LICENSE](LICENSE) file for details.
-
-## 📞 Support
-
-- **Issues**: [GitHub Issues](https://github.com/eosho/markd/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/eosho/markd/discussions)
-- **Email**: support@markdpy.dev
 
 ---
 

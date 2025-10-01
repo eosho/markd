@@ -60,6 +60,8 @@ def serve(
     log_level: str = typer.Option(
         "INFO",
         "--log-level",
+        "--log",
+        "-l",
         help="Logging level (DEBUG/INFO/WARNING/ERROR)",
     ),
 ) -> None:
