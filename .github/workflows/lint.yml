@@ -21,6 +21,8 @@ jobs:
       - uses: astral-sh/setup-uv@v5
         with:
           enable-cache: true
+      - name: Install dependencies
+        run: uv sync --all-extras
       - run: uv run pre-commit run --all-files --show-diff-on-failure
 
   pyright:
@@ -31,4 +33,6 @@ jobs:
       - uses: astral-sh/setup-uv@v5
         with:
           enable-cache: true
+      - name: Install dependencies
+        run: uv sync --all-extras
       - run: uv run pyright
