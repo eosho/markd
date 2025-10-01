@@ -5,13 +5,55 @@
 {% block body %}
 <div style="max-width: 800px; margin: 40px auto; padding: 0 20px;">
     {% if show_back_link %}
-    <a href="/" style="display: inline-block; margin-bottom: 20px; color: #0066cc;">
-        ← Back to index
-    </a>
+    <div style="margin-bottom: 20px; display: flex; gap: 10px;">
+        <button onclick="window.history.back()" class="back-button" title="Go back">
+            ← Back
+        </button>
+        <a href="/" class="home-link" title="Go to index">
+            🏠 Home
+        </a>
+    </div>
     {% endif %}
     
     <div class="rendered-content">
         {{ content | safe }}
     </div>
 </div>
+
+<style>
+.back-button, .home-link {
+    display: inline-flex;
+    align-items: center;
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 500;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+.back-button {
+    background-color: var(--button-bg, #f0f0f0);
+    color: var(--button-text, #333);
+    border: 1px solid var(--button-border, #ddd);
+}
+
+.back-button:hover {
+    background-color: var(--button-hover-bg, #e0e0e0);
+    transform: translateX(-2px);
+}
+
+.home-link {
+    background-color: var(--primary-bg, #0066cc);
+    color: white;
+    border: 1px solid var(--primary-bg, #0066cc);
+}
+
+.home-link:hover {
+    background-color: var(--primary-hover-bg, #0052a3);
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(0, 102, 204, 0.3);
+}
+</style>
 {% endblock %}

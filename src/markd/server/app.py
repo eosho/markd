@@ -91,7 +91,9 @@ def create_app(config: ServerConfig) -> FastAPI:
 
     # Store config on app state
     app.state.config = config
-    app.state.renderer = MarkdownRenderer()
+    # Pass base_path to renderer for link processing
+    base_path = config.serve_path if config.serve_path.is_dir() else config.serve_path.parent
+    app.state.renderer = MarkdownRenderer(base_path=base_path)
     app.state.ws_manager = ConnectionManager()
     app.state.file_observer = None
 
@@ -127,10 +129,10 @@ def create_app(config: ServerConfig) -> FastAPI:
                 "Content-Security-Policy"
             ] = "default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://unpkg.com; style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://unpkg.com; img-src 'self' data: https:; font-src 'self' data: https://cdn.jsdelivr.net https://unpkg.com"
         else:
-            # Stricter CSP for regular content
+            # Stricter CSP for regular content (allow external images for badges)
             response.headers[
                 "Content-Security-Policy"
-            ] = "default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; img-src 'self' data:; font-src 'self' data:"
+            ] = "default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; img-src 'self' data: https:; font-src 'self' data:"
 
         # Add cache headers based on content type
         if request.url.path.startswith("/static/"):
@@ -225,17 +227,33 @@ def create_app(config: ServerConfig) -> FastAPI:
         """View a specific Markdown file."""
         serve_path = app.state.config.serve_path
         templates = app.state.templates
+        
+        # For validation, use parent directory if serving a single file
+        # This allows accessing sibling files like LICENSE.md when serving README.md
+        validation_root = serve_path if serve_path.is_dir() else serve_path.parent
 
         try:
             # Validate path security
             requested = Path(file_path)
-            abs_path = validate_path(requested, serve_path)
+            abs_path = validate_path(requested, validation_root)
 
-            if not abs_path.suffix.lower() in (".md", ".markdown"):
-                raise HTTPException(status_code=400, detail="Not a Markdown file")
+            # Check if file exists
+            if not abs_path.exists():
+                raise FileNotFoundError(f"File not found: {file_path}")
 
-            content = abs_path.read_text(encoding="utf-8")
-            rendered_html = app.state.renderer.render(content)
+            # For markdown files, render normally
+            if abs_path.suffix.lower() in (".md", ".markdown"):
+                content = abs_path.read_text(encoding="utf-8")
+                rendered_html = app.state.renderer.render(content)
+            # For text files (LICENSE, README without extension, .txt), wrap in code block
+            elif abs_path.suffix.lower() in (".txt", "") or abs_path.name in ("LICENSE", "README", "CHANGELOG"):
+                content = abs_path.read_text(encoding="utf-8")
+                # Render as preformatted text
+                rendered_html = f'<pre style="white-space: pre-wrap; font-family: monospace; background: var(--code-bg); padding: 20px; border-radius: 6px; overflow-x: auto;">{content}</pre>'
+            else:
+                raise HTTPException(status_code=400, detail="Unsupported file type")
+
+            # (rendered_html is now set by one of the branches above)
 
             # If serving a directory, show with sidebar; otherwise show single file
             if serve_path.is_dir():
@@ -364,10 +382,12 @@ def create_app(config: ServerConfig) -> FastAPI:
     async def api_file_metadata(file_path: str) -> dict:
         """Get metadata for a specific file."""
         serve_path = app.state.config.serve_path
+        # Use parent directory if serving a single file
+        validation_root = serve_path if serve_path.is_dir() else serve_path.parent
 
         try:
             requested = Path(file_path)
-            abs_path = validate_path(requested, serve_path)
+            abs_path = validate_path(requested, validation_root)
 
             if not abs_path.is_file():
                 raise HTTPException(status_code=404, detail="File not found")
@@ -376,7 +396,7 @@ def create_app(config: ServerConfig) -> FastAPI:
             content = abs_path.read_text(encoding="utf-8")
 
             return {
-                "path": str(abs_path.relative_to(serve_path)),
+                "path": str(abs_path.relative_to(validation_root)),
                 "name": abs_path.name,
                 "size": stat.st_size,
                 "modified": stat.st_mtime,
