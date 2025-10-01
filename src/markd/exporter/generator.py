@@ -115,8 +115,8 @@ class StaticSiteGenerator:
             output_file = self.export_file(md_file, output_dir, relative_path)
             exported_files.append(output_file)
 
-        # Copy static assets if they exist
-        static_dir = Path(__file__).parent.parent / "static"
+        # Copy static assets if they exist (now in root directory)
+        static_dir = Path(__file__).parent.parent.parent.parent / "static"
         if static_dir.exists():
             output_static = output_dir / "static"
             if output_static.exists():

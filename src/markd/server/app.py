@@ -107,12 +107,12 @@ def create_app(config: ServerConfig) -> FastAPI:
         )
         app.state.file_observer = observer
 
-    # Setup templates
-    templates_dir = Path(__file__).parent.parent / "templates"
+    # Setup templates (now in root directory)
+    templates_dir = Path(__file__).parent.parent.parent.parent / "templates"
     app.state.templates = Jinja2Templates(directory=str(templates_dir))
 
-    # Mount static files
-    static_dir = Path(__file__).parent.parent / "static"
+    # Mount static files (now in root directory)
+    static_dir = Path(__file__).parent.parent.parent.parent / "static"
     if static_dir.exists():
         app.mount("/static", StaticFiles(directory=str(static_dir)), name="static")
 
