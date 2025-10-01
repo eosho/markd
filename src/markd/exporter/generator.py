@@ -2,7 +2,6 @@
 
 import shutil
 from pathlib import Path
-from typing import Optional
 
 from markd.renderer import MarkdownRenderer
 
@@ -12,7 +11,7 @@ class StaticSiteGenerator:
 
     def __init__(
         self,
-        renderer: Optional[MarkdownRenderer] = None,
+        renderer: MarkdownRenderer | None = None,
         theme: str = "light",
         minify: bool = False,
     ) -> None:
@@ -29,7 +28,7 @@ class StaticSiteGenerator:
         self.minify = minify
 
     def export_file(
-        self, source: Path, output_dir: Path, relative_path: Optional[Path] = None
+        self, source: Path, output_dir: Path, relative_path: Path | None = None
     ) -> Path:
         """
         Export a single Markdown file to HTML.
@@ -49,7 +48,7 @@ class StaticSiteGenerator:
         if not source.exists():
             raise FileNotFoundError(f"Source file not found: {source}")
 
-        if not source.suffix.lower() in (".md", ".markdown"):
+        if source.suffix.lower() not in (".md", ".markdown"):
             raise ValueError(f"Not a Markdown file: {source}")
 
         # Determine output path

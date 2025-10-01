@@ -1,6 +1,5 @@
 """CLI main entry point using Typer."""
 
-import sys
 import webbrowser
 from pathlib import Path
 
@@ -8,7 +7,7 @@ import typer
 import uvicorn
 from rich.console import Console
 
-from markd.config.models import ServerConfig, VALID_THEMES
+from markd.config.models import VALID_THEMES, ServerConfig
 from markd.config.settings import DEFAULT_HOST, DEFAULT_PORT, DEFAULT_THEME
 
 app = typer.Typer(

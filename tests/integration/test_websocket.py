@@ -1,11 +1,8 @@
 """Contract tests for WebSocket /ws endpoint."""
 
-import asyncio
-from typing import AsyncGenerator
 
 import pytest
 from fastapi.testclient import TestClient
-from starlette.websockets import WebSocketDisconnect
 
 
 @pytest.mark.integration
@@ -22,7 +19,7 @@ class TestWebSocketEndpoint:
         self, test_client_single_file: TestClient
     ) -> None:
         """Test that WebSocket receives reload messages."""
-        with test_client_single_file.websocket_connect("/ws") as websocket:
+        with test_client_single_file.websocket_connect("/ws"):
             # May receive a message immediately or after a timeout
             # Just verify connection works
             pass

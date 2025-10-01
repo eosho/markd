@@ -1,7 +1,7 @@
 """Pytest configuration and shared fixtures."""
 
+from collections.abc import Generator
 from pathlib import Path
-from typing import Generator
 
 import pytest
 from fastapi.testclient import TestClient
@@ -47,16 +47,16 @@ def tmp_markdown_directory(tmp_path: Path, test_markdown_content: str) -> Path:
     """Create a temporary directory with multiple Markdown files."""
     docs_dir = tmp_path / "docs"
     docs_dir.mkdir()
-    
+
     (docs_dir / "index.md").write_text("# Index\n\nWelcome to the docs!")
     (docs_dir / "quickstart.md").write_text(test_markdown_content)
     (docs_dir / "guide.md").write_text("# Guide\n\nDetailed guide here.")
-    
+
     # Create subdirectory
     subdir = docs_dir / "advanced"
     subdir.mkdir()
     (subdir / "nested.md").write_text("# Nested\n\nAdvanced topics.")
-    
+
     return docs_dir
 
 
@@ -67,9 +67,9 @@ def test_client_single_file(
     """Create TestClient for single file mode."""
     # This will fail until server implementation exists
     try:
-        from markd.server.app import create_app
         from markd.config.models import ServerConfig
-        
+        from markd.server.app import create_app
+
         config = ServerConfig(
             host="127.0.0.1",
             port=8000,
@@ -80,7 +80,7 @@ def test_client_single_file(
             allow_write=False,
             log_level="ERROR",
         )
-        
+
         app = create_app(config)
         with TestClient(app) as client:
             yield client
@@ -94,9 +94,9 @@ def test_client_directory(
 ) -> Generator[TestClient, None, None]:
     """Create TestClient for directory mode."""
     try:
-        from markd.server.app import create_app
         from markd.config.models import ServerConfig
-        
+        from markd.server.app import create_app
+
         config = ServerConfig(
             host="127.0.0.1",
             port=8000,
@@ -107,7 +107,7 @@ def test_client_directory(
             allow_write=False,
             log_level="ERROR",
         )
-        
+
         app = create_app(config)
         with TestClient(app) as client:
             yield client

@@ -10,18 +10,20 @@ console = Console()
 
 
 BANNER = """
- ███╗   ███╗ █████╗ ██████╗ ██╗  ██╗██████╗ 
+ ███╗   ███╗ █████╗ ██████╗ ██╗  ██╗██████╗
  ████╗ ████║██╔══██╗██╔══██╗██║ ██╔╝██╔══██╗
  ██╔████╔██║███████║██████╔╝█████╔╝ ██║  ██║
  ██║╚██╔╝██║██╔══██║██╔══██╗██╔═██╗ ██║  ██║
  ██║ ╚═╝ ██║██║  ██║██║  ██║██║  ██╗██████╔╝
- ╚═╝     ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝╚═════╝ 
+ ╚═╝     ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝╚═════╝
 """
 
 TAGLINE = "Python-based Markdown Preview Server with Live Reload"
 
 
-def print_banner(host: str, port: int, serve_path: Path, theme: str, reload_enabled: bool = True) -> None:
+def print_banner(
+    host: str, port: int, serve_path: Path, theme: str, reload_enabled: bool = True
+) -> None:
     """Display the ASCII art banner with server information.
 
     Args:
@@ -32,7 +34,7 @@ def print_banner(host: str, port: int, serve_path: Path, theme: str, reload_enab
         reload_enabled: Whether live reload is enabled
     """
     # Create gradient effect with different colors
-    banner_lines = BANNER.strip().split('\n')
+    banner_lines = BANNER.strip().split("\n")
     colors = ["bright_blue", "blue", "cyan", "bright_cyan", "magenta", "bright_magenta"]
 
     styled_banner = Text()
@@ -66,20 +68,22 @@ def print_banner(host: str, port: int, serve_path: Path, theme: str, reload_enab
     info_content.append("Theme:       ", style="dim")
     info_content.append(theme.capitalize(), style="bright_magenta")
     info_content.append("\n")
-    
+
     info_content.append("🔄 ", style="bright_white")
     info_content.append("Live Reload: ", style="dim")
     reload_status = "enabled" if reload_enabled else "disabled"
     reload_style = "bright_cyan bold" if reload_enabled else "yellow"
     info_content.append(reload_status, style=reload_style)
 
-    console.print(Panel(
-        info_content,
-        title="[bold bright_white]Server Configuration[/bold bright_white]",
-        border_style="bright_cyan",
-        padding=(1, 2),
-        expand=False
-    ))
+    console.print(
+        Panel(
+            info_content,
+            title="[bold bright_white]Server Configuration[/bold bright_white]",
+            border_style="bright_cyan",
+            padding=(1, 2),
+            expand=False,
+        )
+    )
     console.print()
     console.print("  [dim italic]Press Ctrl+C to stop the server[/dim italic]")
     console.print()

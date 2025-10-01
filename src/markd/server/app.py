@@ -1,9 +1,9 @@
 """FastAPI application factory."""
 
 import logging
+from collections.abc import AsyncGenerator
 from contextlib import asynccontextmanager
 from pathlib import Path
-from typing import AsyncGenerator
 
 from fastapi import FastAPI, HTTPException, Request, WebSocket
 from fastapi.responses import HTMLResponse, Response
@@ -36,15 +36,16 @@ def _handle_file_change(app: FastAPI, event: WatcherEvent) -> None:
         # Broadcast reload to all connected clients
         # Use the event loop stored during lifespan startup
         manager: ConnectionManager = app.state.ws_manager
-        loop = getattr(app.state, 'event_loop', None)
+        loop = getattr(app.state, "event_loop", None)
 
-        logger.debug(f"Event loop exists: {loop is not None}, WebSocket connections: {manager.get_connection_count()}")
+        logger.debug(
+            f"Event loop exists: {loop is not None}, WebSocket connections: {manager.get_count()}"
+        )
 
         if loop and loop.is_running():
             try:
                 future = asyncio.run_coroutine_threadsafe(
-                    manager.send_reload(event.file_path),
-                    loop
+                    manager.send_reload(event.file_path), loop
                 )
                 # Wait briefly to ensure it's scheduled
                 future.result(timeout=0.5)
@@ -52,7 +53,7 @@ def _handle_file_change(app: FastAPI, event: WatcherEvent) -> None:
             except Exception as e:
                 logger.error(f"✗ Failed to trigger reload: {e}")
         else:
-            logger.warning(f"Cannot trigger reload - event loop unavailable or not running")
+            logger.warning("Cannot trigger reload - event loop unavailable or not running")
 
 
 def create_app(config: ServerConfig) -> FastAPI:
@@ -65,6 +66,7 @@ def create_app(config: ServerConfig) -> FastAPI:
     Returns:
         Configured FastAPI app
     """
+
     @asynccontextmanager
     async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
         """Handle application lifespan events."""
@@ -100,7 +102,9 @@ def create_app(config: ServerConfig) -> FastAPI:
     # Setup file watcher if reload enabled
     if config.reload_enabled:
         observer = FileObserver(
-            watch_path=config.serve_path if config.serve_path.is_dir() else config.serve_path.parent,
+            watch_path=(
+                config.serve_path if config.serve_path.is_dir() else config.serve_path.parent
+            ),
             callback=lambda event: _handle_file_change(app, event),
             debounce_ms=150,
             recursive=True,
@@ -122,17 +126,25 @@ def create_app(config: ServerConfig) -> FastAPI:
         response = await call_next(request)
         response.headers["X-Content-Type-Options"] = "nosniff"
         response.headers["X-Frame-Options"] = "DENY"
-        
+
         # Relaxed CSP for /api/docs (Swagger UI) and /openapi.json
         if request.url.path.startswith("/api/docs") or request.url.path == "/openapi.json":
-            response.headers[
-                "Content-Security-Policy"
-            ] = "default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://unpkg.com; style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://unpkg.com; img-src 'self' data: https:; font-src 'self' data: https://cdn.jsdelivr.net https://unpkg.com"
+            response.headers["Content-Security-Policy"] = (
+                "default-src 'self'; "
+                "script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://unpkg.com; "
+                "style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://unpkg.com; "
+                "img-src 'self' data: https:; "
+                "font-src 'self' data: https://cdn.jsdelivr.net https://unpkg.com"
+            )
         else:
             # Stricter CSP for regular content (allow external images for badges)
-            response.headers[
-                "Content-Security-Policy"
-            ] = "default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; img-src 'self' data: https:; font-src 'self' data:"
+            response.headers["Content-Security-Policy"] = (
+                "default-src 'self'; "
+                "script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; "
+                "style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; "
+                "img-src 'self' data: https:; "
+                "font-src 'self' data:"
+            )
 
         # Add cache headers based on content type
         if request.url.path.startswith("/static/"):
@@ -227,7 +239,7 @@ def create_app(config: ServerConfig) -> FastAPI:
         """View a specific Markdown file."""
         serve_path = app.state.config.serve_path
         templates = app.state.templates
-        
+
         # For validation, use parent directory if serving a single file
         # This allows accessing sibling files like LICENSE.md when serving README.md
         validation_root = serve_path if serve_path.is_dir() else serve_path.parent
@@ -246,10 +258,18 @@ def create_app(config: ServerConfig) -> FastAPI:
                 content = abs_path.read_text(encoding="utf-8")
                 rendered_html = app.state.renderer.render(content)
             # For text files (LICENSE, README without extension, .txt), wrap in code block
-            elif abs_path.suffix.lower() in (".txt", "") or abs_path.name in ("LICENSE", "README", "CHANGELOG"):
+            elif abs_path.suffix.lower() in (".txt", "") or abs_path.name in (
+                "LICENSE",
+                "README",
+                "CHANGELOG",
+            ):
                 content = abs_path.read_text(encoding="utf-8")
                 # Render as preformatted text
-                rendered_html = f'<pre style="white-space: pre-wrap; font-family: monospace; background: var(--code-bg); padding: 20px; border-radius: 6px; overflow-x: auto;">{content}</pre>'
+                rendered_html = (
+                    f'<pre style="white-space: pre-wrap; font-family: monospace; '
+                    f'background: var(--code-bg); padding: 20px; border-radius: 6px; '
+                    f'overflow-x: auto;">{content}</pre>'
+                )
             else:
                 raise HTTPException(status_code=400, detail="Unsupported file type")
 
@@ -335,19 +355,18 @@ def create_app(config: ServerConfig) -> FastAPI:
     async def get_raw_content_single() -> Response:
         """Get raw markdown content of the served file (single file mode only)."""
         serve_path = app.state.config.serve_path
-        
+
         # Only allow /raw endpoint when serving a single file
         if serve_path.is_dir():
             raise HTTPException(
-                status_code=403, 
-                detail="/raw endpoint is only available when serving a single file"
+                status_code=403, detail="/raw endpoint is only available when serving a single file"
             )
-        
+
         # Only allow markdown files for /raw endpoint
         if serve_path.suffix.lower() not in (".md", ".markdown"):
             raise HTTPException(
-                status_code=400, 
-                detail="Only markdown files (.md, .markdown) are supported by /raw endpoint"
+                status_code=400,
+                detail="Only markdown files (.md, .markdown) are supported by /raw endpoint",
             )
 
         try:
@@ -359,7 +378,7 @@ def create_app(config: ServerConfig) -> FastAPI:
                 headers={
                     "Content-Disposition": f'inline; filename="{serve_path.name}"',
                     "X-Content-Type-Options": "nosniff",
-                }
+                },
             )
 
         except FileNotFoundError:
@@ -372,14 +391,13 @@ def create_app(config: ServerConfig) -> FastAPI:
     async def get_raw_content(file_path: str) -> Response:
         """Get raw markdown content without rendering (single file mode only)."""
         serve_path = app.state.config.serve_path
-        
+
         # Only allow /raw endpoint when serving a single file
         if serve_path.is_dir():
             raise HTTPException(
-                status_code=403, 
-                detail="/raw endpoint is only available when serving a single file"
+                status_code=403, detail="/raw endpoint is only available when serving a single file"
             )
-        
+
         # For validation, use parent directory since we're serving a single file
         validation_root = serve_path.parent
 
@@ -395,8 +413,8 @@ def create_app(config: ServerConfig) -> FastAPI:
             # Only allow markdown files for /raw endpoint
             if abs_path.suffix.lower() not in (".md", ".markdown"):
                 raise HTTPException(
-                    status_code=400, 
-                    detail="Only markdown files (.md, .markdown) are supported by /raw endpoint"
+                    status_code=400,
+                    detail="Only markdown files (.md, .markdown) are supported by /raw endpoint",
                 )
 
             # Read and return raw content
@@ -407,7 +425,7 @@ def create_app(config: ServerConfig) -> FastAPI:
                 headers={
                     "Content-Disposition": f'inline; filename="{abs_path.name}"',
                     "X-Content-Type-Options": "nosniff",
-                }
+                },
             )
 
         except SecurityError:
@@ -432,20 +450,24 @@ def create_app(config: ServerConfig) -> FastAPI:
             for item in sorted(directory.iterdir()):
                 if item.is_file() and item.suffix.lower() in (".md", ".markdown"):
                     stat = item.stat()
-                    files.append({
-                        "name": item.name,
-                        "path": str(item.relative_to(serve_path)),
-                        "size": stat.st_size,
-                        "modified": stat.st_mtime,
-                    })
+                    files.append(
+                        {
+                            "name": item.name,
+                            "path": str(item.relative_to(serve_path)),
+                            "size": stat.st_size,
+                            "modified": stat.st_mtime,
+                        }
+                    )
                 elif item.is_dir() and not item.name.startswith("."):
                     child_tree = build_tree(item)
-                    subdirs.append({
-                        "name": item.name,
-                        "path": str(item.relative_to(serve_path)),
-                        "files": child_tree["files"],
-                        "subdirs": child_tree["subdirs"],
-                    })
+                    subdirs.append(
+                        {
+                            "name": item.name,
+                            "path": str(item.relative_to(serve_path)),
+                            "files": child_tree["files"],
+                            "subdirs": child_tree["subdirs"],
+                        }
+                    )
 
             return {"files": files, "subdirs": subdirs}
 
@@ -459,7 +481,7 @@ def create_app(config: ServerConfig) -> FastAPI:
                 "path": ".",
                 "files": tree_data["files"],
                 "subdirs": tree_data["subdirs"],
-            }
+            },
         }
 
     # API endpoint: get file metadata
