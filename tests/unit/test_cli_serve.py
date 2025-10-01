@@ -9,7 +9,7 @@ import pytest
 
 @pytest.mark.unit
 class TestCliServeCommand:
-    """Test suite for markd CLI serve command."""
+    """Test suite for markdpy CLI serve command."""
 
     def test_valid_file_starts_server(self, tmp_path: Path) -> None:
         """Test that valid file path starts server."""
@@ -19,7 +19,7 @@ class TestCliServeCommand:
         # This will actually try to start server in implementation
         # For now, test command parsing would work
         result = subprocess.run(
-            [sys.executable, "-m", "markd.cli.main", str(test_file), "--help"],
+            [sys.executable, "-m", "markdpy.cli.main", str(test_file), "--help"],
             capture_output=True,
             text=True,
             timeout=5,
@@ -33,7 +33,7 @@ class TestCliServeCommand:
         (tmp_path / "test.md").write_text("# Test")
 
         result = subprocess.run(
-            [sys.executable, "-m", "markd.cli.main", str(tmp_path), "--help"],
+            [sys.executable, "-m", "markdpy.cli.main", str(tmp_path), "--help"],
             capture_output=True,
             text=True,
             timeout=5,
@@ -46,7 +46,7 @@ class TestCliServeCommand:
         nonexistent = tmp_path / "nonexistent.md"
 
         result = subprocess.run(
-            [sys.executable, "-m", "markd.cli.main", str(nonexistent)],
+            [sys.executable, "-m", "markdpy.cli.main", str(nonexistent)],
             capture_output=True,
             text=True,
             timeout=5,
@@ -59,7 +59,7 @@ class TestCliServeCommand:
     def test_help_flag_shows_usage(self) -> None:
         """Test that --help shows usage information."""
         result = subprocess.run(
-            [sys.executable, "-m", "markd.cli.main", "--help"],
+            [sys.executable, "-m", "markdpy.cli.main", "--help"],
             capture_output=True,
             text=True,
             timeout=5,
@@ -67,7 +67,7 @@ class TestCliServeCommand:
 
         # Help should work
         if result.returncode == 0:
-            assert "markd" in result.stdout.lower() or "usage" in result.stdout.lower()
+            assert "markdpy" in result.stdout.lower() or "usage" in result.stdout.lower()
 
     def test_port_option_accepted(self, tmp_path: Path) -> None:
         """Test that --port option is accepted."""
@@ -75,7 +75,7 @@ class TestCliServeCommand:
         test_file.write_text("# Test")
 
         result = subprocess.run(
-            [sys.executable, "-m", "markd.cli.main", str(test_file), "--port", "3000", "--help"],
+            [sys.executable, "-m", "markdpy.cli.main", str(test_file), "--port", "3000", "--help"],
             capture_output=True,
             text=True,
             timeout=5,
@@ -90,7 +90,7 @@ class TestCliServeCommand:
         test_file.write_text("# Test")
 
         result = subprocess.run(
-            [sys.executable, "-m", "markd.cli.main", str(test_file), "--theme", "dark", "--help"],
+            [sys.executable, "-m", "markdpy.cli.main", str(test_file), "--theme", "dark", "--help"],
             capture_output=True,
             text=True,
             timeout=5,
@@ -104,7 +104,7 @@ class TestCliServeCommand:
         test_file.write_text("# Test")
 
         result = subprocess.run(
-            [sys.executable, "-m", "markd.cli.main", str(test_file), "--no-open", "--help"],
+            [sys.executable, "-m", "markdpy.cli.main", str(test_file), "--no-open", "--help"],
             capture_output=True,
             text=True,
             timeout=5,

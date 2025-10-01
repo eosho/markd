@@ -1,11 +1,11 @@
 """
-Telemetry client for the `markd` project.
+Telemetry client for the `markdpy` project.
 
 This module defines lightweight, anonymous telemetry for tracking
 aggregate usage statistics such as number of renders, errors, and
 average render latency. Telemetry is enabled by default, but can be
 disabled by the user either programmatically or via the environment
-variable `MARKD_TELEMETRY=0`.
+variable `TELEMETRY=0`.
 
 Collected metrics are anonymous and minimal:
     • An install ID (UUID generated locally once)
@@ -16,7 +16,7 @@ Collected metrics are anonymous and minimal:
     • Average render latency (ms) since last flush
 
 Telemetry is persisted locally in a small JSON file inside the user
-configuration directory (e.g., ~/.config/markd/telemetry.json).
+configuration directory (e.g., ~/.config/markdpy/telemetry.json).
 
 Usage:
     >>> telemetry = TelemetryClient(version="1.0.0")
@@ -78,7 +78,7 @@ class TelemetryPayload:
 
     Attributes:
         install_id (str): Anonymous UUID of this installation.
-        version (str): Version string of the application (markd).
+        version (str): Version string of the application (markdpy).
         os (str): Operating system name (Linux, Darwin, Windows, etc.).
         python (str): Python runtime version.
         events (TelemetryEvents): Aggregate counters.
@@ -92,7 +92,7 @@ class TelemetryPayload:
 
 
 class TelemetryClient:
-    """Anonymous telemetry client for the `markd` project."""
+    """Anonymous telemetry client for the `markdpy` project."""
 
     ENDPOINT = "https://telemetry.markdpy.dev/api/telemetry"
     FLUSH_INTERVAL = 60  # seconds
@@ -105,7 +105,7 @@ class TelemetryClient:
             version (str): Version string of the calling application.
         """
         self.version = version
-        self.config_path = Path(user_config_dir("markd")) / "telemetry.json"
+        self.config_path = Path(user_config_dir("markdpy")) / "telemetry.json"
         self.state: TelemetryState = self._load_or_init()
 
         self._renders: list[float] = []
@@ -113,7 +113,7 @@ class TelemetryClient:
         self._last_flush = 0
 
         # Environment variable override (disable telemetry)
-        if os.getenv("MARKD_TELEMETRY", "1") == "0":
+        if os.getenv("TELEMETRY", "1") == "0":
             self.state.enabled = False
 
     def is_enabled(self) -> bool:

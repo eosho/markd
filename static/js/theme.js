@@ -1,5 +1,5 @@
 /**
- * Theme Switcher for markd
+ * Theme Switcher for markdpy
  * Handles theme toggle button, localStorage persistence, and CSS variable updates
  */
 
@@ -8,7 +8,7 @@
 
     // Theme configuration
     const THEMES = ['light', 'dark'];
-    const STORAGE_KEY = 'markd-theme';
+    const STORAGE_KEY = 'markdpy-theme';
     const DEFAULT_THEME = 'light';
 
     /**
@@ -44,7 +44,7 @@
         // Store preference
         localStorage.setItem(STORAGE_KEY, theme);
 
-        console.log(`[markd] Theme applied: ${theme}`);
+        console.log(`[markdpy] Theme applied: ${theme}`);
     }
 
     /**
@@ -117,7 +117,7 @@
         const currentTheme = getCurrentTheme();
         updateThemeButton(currentTheme);
 
-        console.log('[markd] Theme toggle button created');
+        console.log('[markdpy] Theme toggle button created');
     }
 
     /**
@@ -142,7 +142,7 @@
             });
         }
 
-        console.log('[markd] Theme system initialized');
+        console.log('[markdpy] Theme system initialized');
     }
 
     // Initialize on DOM ready
@@ -153,7 +153,7 @@
     }
 
     // Export for programmatic access
-    window.markdTheme = {
+    window.markdpyTheme = {
         getCurrentTheme,
         applyTheme,
         toggleTheme,

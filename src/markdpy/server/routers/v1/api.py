@@ -10,8 +10,8 @@ from typing import Any
 
 from fastapi import APIRouter, Depends, HTTPException
 
-from markd.security.path_validator import SecurityError, validate_path
-from markd.server.dependencies import get_serve_path, get_validation_root
+from markdpy.security.path_validator import SecurityError, validate_path
+from markdpy.server.dependencies import get_serve_path, get_validation_root
 
 logger = logging.getLogger(__name__)
 

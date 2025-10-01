@@ -16,12 +16,12 @@ from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
 
-from markd import __version__
-from markd.config.models import ServerConfig
-from markd.server.middleware import add_security_headers
-from markd.server.routers.v1 import api, ui, ws
-from markd.server.utils import setup_app_state
-from markd.telemetry import flush, init_telemetry
+from markdpy import __version__
+from markdpy.config.models import ServerConfig
+from markdpy.server.middleware import add_security_headers
+from markdpy.server.routers.v1 import api, ui, ws
+from markdpy.server.utils import setup_app_state
+from markdpy.telemetry import flush, init_telemetry
 
 logger = logging.getLogger(__name__)
 

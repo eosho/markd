@@ -2,13 +2,13 @@
 
 import os
 
-from markd.config.models import VALID_THEMES, RenderConfig
+from markdpy.config.models import VALID_THEMES, RenderConfig
 
 # Default settings
-DEFAULT_HOST = os.getenv("MARKD_HOST", "127.0.0.1")
-DEFAULT_PORT = int(os.getenv("MARKD_PORT", "8000"))
-DEFAULT_THEME = os.getenv("MARKD_THEME", "light")
-DEFAULT_LOG_LEVEL = os.getenv("MARKD_LOG_LEVEL", "INFO")
+DEFAULT_HOST = os.getenv("HOST", "127.0.0.1")
+DEFAULT_PORT = int(os.getenv("PORT", "8000"))
+DEFAULT_THEME = os.getenv("THEME", "light")
+DEFAULT_LOG_LEVEL = os.getenv("LOG_LEVEL", "INFO")
 
 # Rendering defaults
 DEFAULT_RENDER_CONFIG = RenderConfig.default()

@@ -9,10 +9,10 @@ from pathlib import Path
 from fastapi import Request, WebSocket
 from fastapi.templating import Jinja2Templates
 
-from markd.config.models import ServerConfig
-from markd.renderer import MarkdownRenderer
-from markd.server.websocket import ConnectionManager
-from markd.watcher import FileObserver
+from markdpy.config.models import ServerConfig
+from markdpy.renderer import MarkdownRenderer
+from markdpy.server.websocket import ConnectionManager
+from markdpy.watcher import FileObserver
 
 
 def get_config(request: Request) -> ServerConfig:

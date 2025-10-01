@@ -8,8 +8,8 @@ import logging
 
 from fastapi import APIRouter, Depends, WebSocket
 
-from markd.server.dependencies import get_ws_manager
-from markd.server.websocket import ConnectionManager, websocket_endpoint
+from markdpy.server.dependencies import get_ws_manager
+from markdpy.server.websocket import ConnectionManager, websocket_endpoint
 
 logger = logging.getLogger(__name__)
 

@@ -8,10 +8,10 @@ import typer
 import uvicorn
 from rich.console import Console
 
-from markd import __version__
-from markd.config.models import VALID_THEMES, ServerConfig
-from markd.config.settings import DEFAULT_HOST, DEFAULT_PORT, DEFAULT_THEME
-from markd.telemetry import flush, init_telemetry, track_error
+from markdpy import __version__
+from markdpy.config.models import VALID_THEMES, ServerConfig
+from markdpy.config.settings import DEFAULT_HOST, DEFAULT_PORT, DEFAULT_THEME
+from markdpy.telemetry import flush, init_telemetry, track_error
 
 app = typer.Typer(
     name="markd",
@@ -94,7 +94,7 @@ def serve(
             raise typer.Exit(code=2)
 
         # Import and display banner
-        from markd.server.banner import print_banner
+        from markdpy.server.banner import print_banner
 
         print_banner(
             host=host,
@@ -116,7 +116,7 @@ def serve(
             threading.Thread(target=open_browser_delayed, daemon=True).start()
 
         # Create app with config
-        from markd.server.app import create_app
+        from markdpy.server.app import create_app
 
         server_app = create_app(config)
 
@@ -178,7 +178,7 @@ def export(
             raise typer.Exit(code=3)
 
         # Create exporter
-        from markd.exporter import StaticSiteGenerator
+        from markdpy.exporter import StaticSiteGenerator
 
         generator = StaticSiteGenerator(theme=theme, minify=minify)
 
@@ -208,7 +208,7 @@ def export(
 
         # Track successful export
         export_time_ms = (time.time() - start_time) * 1000
-        from markd.telemetry import track_render
+        from markdpy.telemetry import track_render
 
         track_render(export_time_ms)  # Reuse render tracking for export operations
 
@@ -236,7 +236,7 @@ def main() -> None:
     _config = None
 
     def create_app_factory() -> "fastapi.FastAPI":  # type: ignore # noqa: F821
-        from markd.server.app import create_app
+        from markdpy.server.app import create_app
 
         return create_app(_config) if _config else create_app(ServerConfig())
 

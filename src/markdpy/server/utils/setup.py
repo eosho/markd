@@ -10,11 +10,11 @@ from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 
-from markd.config.models import ServerConfig
-from markd.renderer import MarkdownRenderer
-from markd.server.utils.handlers import handle_file_change
-from markd.server.websocket import ConnectionManager
-from markd.watcher import FileObserver
+from markdpy.config.models import ServerConfig
+from markdpy.renderer import MarkdownRenderer
+from markdpy.server.utils.handlers import handle_file_change
+from markdpy.server.websocket import ConnectionManager
+from markdpy.watcher import FileObserver
 
 
 def setup_app_state(app: FastAPI, config: ServerConfig) -> None:

@@ -12,10 +12,10 @@ from fastapi import APIRouter, Depends, HTTPException, Request
 from fastapi.responses import HTMLResponse, Response
 from fastapi.templating import Jinja2Templates
 
-from markd.config.models import ServerConfig
-from markd.renderer import MarkdownRenderer
-from markd.security.path_validator import SecurityError, validate_path
-from markd.server.dependencies import (
+from markdpy.config.models import ServerConfig
+from markdpy.renderer import MarkdownRenderer
+from markdpy.security.path_validator import SecurityError, validate_path
+from markdpy.server.dependencies import (
     get_config,
     get_reload_enabled,
     get_renderer,
@@ -24,7 +24,7 @@ from markd.server.dependencies import (
     get_theme,
     get_validation_root,
 )
-from markd.telemetry import track_error, track_render
+from markdpy.telemetry import track_error, track_render
 
 logger = logging.getLogger(__name__)
 
