@@ -168,8 +168,8 @@ markd includes two professionally designed themes:
 ### Theme Toggle
 
 When using the web interface, you can toggle between themes using the button in the top-right corner:
-- **Light mode**: Shows 🌙 moon icon (click to switch to dark)
-- **Dark mode**: Shows ☀️ sun icon (click to switch to light)
+- **Light mode**: Shows 🌞 moon icon (click to switch to dark)
+- **Dark mode**: Shows 🌚 sun icon (click to switch to light)
 
 Your theme preference is saved in browser localStorage.
 
