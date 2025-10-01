@@ -113,8 +113,7 @@ def validate_path(requested_path: Path | str, root_path: Path) -> Path:
         # Check for hidden files (starting with .)
         if part.startswith("."):
             raise SecurityError(
-                f"Access to hidden files denied: {part}. "
-                "Paths starting with '.' are not allowed."
+                f"Access to hidden files denied: {part}. Paths starting with '.' are not allowed."
             )
 
         # Validate filename characters
@@ -163,9 +162,11 @@ def validate_path(requested_path: Path | str, root_path: Path) -> Path:
                     f"Symlink traversal attempt detected: {requested_path} "
                     f"resolves outside serve root."
                 )
-        except (OSError, RuntimeError):
-            # If we can't resolve symlinks, be conservative and deny
-            pass
+        except (OSError, RuntimeError) as e:
+            # If we can't resolve symlinks, raise a security error
+            raise SecurityError(
+                f"Failed to resolve symlinks for {requested_path}: {e}"
+            ) from e
 
         # Check if path exists
         if not abs_requested.exists():

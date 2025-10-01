@@ -1,9 +1,8 @@
 """Application settings and configuration."""
 
 import os
-from pathlib import Path
 
-from markd.config.models import VALID_THEMES, RenderConfig, ServerConfig
+from markd.config.models import VALID_THEMES, RenderConfig
 
 # Default settings
 DEFAULT_HOST = os.getenv("MARKD_HOST", "127.0.0.1")
@@ -13,22 +12,6 @@ DEFAULT_LOG_LEVEL = os.getenv("MARKD_LOG_LEVEL", "INFO")
 
 # Rendering defaults
 DEFAULT_RENDER_CONFIG = RenderConfig.default()
-
-
-# Server defaults
-def get_default_server_config(serve_path: Path | None = None) -> ServerConfig:
-    """Get default server configuration."""
-    return ServerConfig(
-        host=DEFAULT_HOST,
-        port=DEFAULT_PORT,
-        serve_path=serve_path or Path("."),
-        theme=DEFAULT_THEME,
-        open_browser=True,
-        reload_enabled=True,
-        allow_write=False,
-        log_level=DEFAULT_LOG_LEVEL,
-    )
-
 
 # File size limits
 MAX_FILE_SIZE_MB = 10
@@ -52,7 +35,6 @@ __all__ = [
     "DEFAULT_THEME",
     "DEFAULT_LOG_LEVEL",
     "DEFAULT_RENDER_CONFIG",
-    "get_default_server_config",
     "MAX_FILE_SIZE_BYTES",
     "DEBOUNCE_DELAY_SECONDS",
     "WEBSOCKET_PING_INTERVAL",

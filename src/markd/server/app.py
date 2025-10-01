@@ -56,7 +56,6 @@ def create_app(config: ServerConfig) -> FastAPI:
 
         yield
 
-        # Shutdown: stop file watcher
         if app.state.file_observer:
             app.state.file_observer.stop()
 

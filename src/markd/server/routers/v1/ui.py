@@ -253,6 +253,7 @@ async def view_file(
             status_code=500,
         )
 
+
 @router.get("/raw", response_class=Response)
 async def get_raw_content_single(
     serve_path: Path = Depends(get_serve_path),
