@@ -134,7 +134,10 @@ async def root(
         return response
 
     except Exception:
-        track_error()  # Track any unexpected errors
+        try:
+            track_error()  # Track any unexpected errors
+        except Exception:
+            logger.exception("track_error() failed in root endpoint")
         logger.exception("Error in root endpoint")
         raise
 
