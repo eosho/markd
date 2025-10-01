@@ -14,7 +14,7 @@ from markdpy.config.settings import DEFAULT_HOST, DEFAULT_PORT, DEFAULT_THEME
 from markdpy.telemetry import flush, init_telemetry, track_error
 
 app = typer.Typer(
-    name="markd",
+    name="markdpy",
     help="Python-based Markdown preview server with live reload",
     add_completion=False,
 )
@@ -182,7 +182,7 @@ def export(
 
         generator = StaticSiteGenerator(theme=theme, minify=minify)
 
-        console.print("\n[bold blue]markd export[/bold blue] - Static HTML Generator\n")
+        console.print("\n[bold blue]markdpy export[/bold blue] - Static HTML Generator\n")
         console.print(f"[green]✓[/green] Source: {source}")
         console.print(f"[green]✓[/green] Output: {output}")
         console.print(f"[green]✓[/green] Theme: {theme}")
