@@ -3,7 +3,7 @@
 import shutil
 from pathlib import Path
 
-from markd.renderer import MarkdownRenderer
+from markdpy.renderer import MarkdownRenderer
 
 
 class StaticSiteGenerator:

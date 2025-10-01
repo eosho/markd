@@ -31,7 +31,7 @@
              * Resets the reconnect attempts counter to 0.
              */
             ws.onopen = function() {
-                console.log('[markd] Connected to live reload server');
+                console.log('[markdpy] Connected to live reload server');
                 reconnectAttempts = 0;
             };
 
@@ -53,15 +53,15 @@
                         // Don't reload if we're navigating or just loaded the page
                         const timeSinceLoad = Date.now() - pageLoadTime;
                         if (isNavigating) {
-                            console.log('[markd] Ignoring reload during navigation');
+                            console.log('[markdpy] Ignoring reload during navigation');
                             return;
                         }
                         if (timeSinceLoad < 500) {
-                            console.log('[markd] Ignoring reload shortly after page load');
+                            console.log('[markdpy] Ignoring reload shortly after page load');
                             return;
                         }
                         
-                        console.log('[markd] Reloading page...');
+                        console.log('[markdpy] Reloading page...');
                         // Small delay to avoid interfering with navigation
                         setTimeout(function() {
                             window.location.reload();
@@ -71,7 +71,7 @@
                         ws.send(JSON.stringify({ type: 'pong' }));
                     }
                 } catch (e) {
-                    console.error('[markd] Error parsing message:', e);
+                    console.error('[markdpy] Error parsing message:', e);
                 }
             };
 
@@ -82,7 +82,7 @@
              * attempts to reconnect to the live reload server.
              */
             ws.onclose = function() {
-                console.log('[markd] Disconnected from live reload server');
+                console.log('[markdpy] Disconnected from live reload server');
                 // Don't try to reconnect if page is being unloaded
                 if (!document.hidden) {
                     attemptReconnect();
@@ -99,12 +99,12 @@
              * @param {Error} error - The WebSocket error that occurred.
              */
             ws.onerror = function(error) {
-                console.error('[markd] WebSocket error:', error);
+                console.error('[markdpy] WebSocket error:', error);
                 ws.close();
             };
 
         } catch (e) {
-            console.error('[markd] Failed to create WebSocket:', e);
+            console.error('[markdpy] Failed to create WebSocket:', e);
             attemptReconnect();
         }
     }
@@ -122,14 +122,14 @@
      */
     function attemptReconnect() {
         if (reconnectAttempts >= maxReconnectAttempts) {
-            console.log('[markd] Max reconnect attempts reached. Live reload disabled.');
+            console.log('[markdpy] Max reconnect attempts reached. Live reload disabled.');
             return;
         }
 
         const delay = baseReconnectDelay * Math.pow(2, reconnectAttempts);
         reconnectAttempts++;
 
-        console.log(`[markd] Reconnecting in ${delay}ms (attempt ${reconnectAttempts}/${maxReconnectAttempts})...`);
+        console.log(`[markdpy] Reconnecting in ${delay}ms (attempt ${reconnectAttempts}/${maxReconnectAttempts})...`);
         
         setTimeout(connect, delay);
     }
@@ -143,7 +143,7 @@
 
     // Clean up WebSocket connection before page unload
     window.addEventListener('beforeunload', function() {
-        console.log('[markd] Page unloading, closing WebSocket');
+        console.log('[markdpy] Page unloading, closing WebSocket');
         if (ws && ws.readyState === WebSocket.OPEN) {
             ws.close();
         }
@@ -153,7 +153,7 @@
     document.addEventListener('click', function(e) {
         if (e.target.tagName === 'A' || e.target.closest('a')) {
             const link = e.target.tagName === 'A' ? e.target : e.target.closest('a');
-            console.log('[markd] Link clicked:', link.href);
+            console.log('[markdpy] Link clicked:', link.href);
             isNavigating = true;
         }
     }, true);

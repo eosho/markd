@@ -1,6 +1,6 @@
 # Release Process
 
-This document describes how to create a new release of markd.
+This document describes how to create a new release of markdpy.
 
 ## Prerequisites
 
@@ -19,7 +19,7 @@ Update the version in `pyproject.toml`:
 
 ```toml
 [project]
-name = "markd"
+name = "markdpy"
 version = "1.0.0"  # Update this
 ```
 

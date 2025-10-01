@@ -1,5 +1,5 @@
 """Markdown renderer package."""
 
-from markd.renderer.engine import MarkdownRenderer
+from markdpy.renderer.engine import MarkdownRenderer
 
 __all__ = ["MarkdownRenderer"]

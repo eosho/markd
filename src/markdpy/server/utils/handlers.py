@@ -9,8 +9,8 @@ import logging
 
 from fastapi import FastAPI
 
-from markd.config.models import WatcherEvent
-from markd.server.websocket import ConnectionManager
+from markdpy.config.models import WatcherEvent
+from markdpy.server.websocket import ConnectionManager
 
 logger = logging.getLogger(__name__)
 

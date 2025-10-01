@@ -9,7 +9,7 @@ from fastapi.testclient import TestClient
 
 @pytest.fixture
 def test_markdown_content() -> str:
-    """Sample Markdown content for testing."""
+    """Sample markdown content for testing."""
     return """# Test Document
 
 This is a test document with **bold** and *italic* text.
@@ -36,7 +36,7 @@ def hello():
 
 @pytest.fixture
 def tmp_markdown_file(tmp_path: Path, test_markdown_content: str) -> Path:
-    """Create a temporary Markdown file for testing."""
+    """Create a temporary markdown file for testing."""
     file_path = tmp_path / "test.md"
     file_path.write_text(test_markdown_content)
     return file_path
@@ -44,7 +44,7 @@ def tmp_markdown_file(tmp_path: Path, test_markdown_content: str) -> Path:
 
 @pytest.fixture
 def tmp_markdown_directory(tmp_path: Path, test_markdown_content: str) -> Path:
-    """Create a temporary directory with multiple Markdown files."""
+    """Create a temporary directory with multiple markdown files."""
     docs_dir = tmp_path / "docs"
     docs_dir.mkdir()
 
@@ -67,8 +67,8 @@ def test_client_single_file(
     """Create TestClient for single file mode."""
     # This will fail until server implementation exists
     try:
-        from markd.config.models import ServerConfig
-        from markd.server.app import create_app
+        from markdpy.config.models import ServerConfig
+        from markdpy.server.app import create_app
 
         config = ServerConfig(
             host="127.0.0.1",
@@ -94,8 +94,8 @@ def test_client_directory(
 ) -> Generator[TestClient, None, None]:
     """Create TestClient for directory mode."""
     try:
-        from markd.config.models import ServerConfig
-        from markd.server.app import create_app
+        from markdpy.config.models import ServerConfig
+        from markdpy.server.app import create_app
 
         config = ServerConfig(
             host="127.0.0.1",

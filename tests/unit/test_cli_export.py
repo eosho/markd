@@ -9,7 +9,7 @@ import pytest
 
 @pytest.mark.unit
 class TestCliExportCommand:
-    """Test suite for markd export command."""
+    """Test suite for markdpy export command."""
 
     def test_export_single_file_to_html(self, tmp_path: Path) -> None:
         """Test that export command exports single file to HTML."""
@@ -19,7 +19,7 @@ class TestCliExportCommand:
         output.mkdir()
 
         result = subprocess.run(
-            [sys.executable, "-m", "markd.cli.main", "export", str(source), str(output)],
+            [sys.executable, "-m", "markdpy.cli.main", "export", str(source), str(output)],
             capture_output=True,
             text=True,
             timeout=10,
@@ -39,7 +39,7 @@ class TestCliExportCommand:
         output.mkdir()
 
         result = subprocess.run(
-            [sys.executable, "-m", "markd.cli.main", "export", str(source), str(output)],
+            [sys.executable, "-m", "markdpy.cli.main", "export", str(source), str(output)],
             capture_output=True,
             text=True,
             timeout=10,
@@ -58,7 +58,7 @@ class TestCliExportCommand:
             [
                 sys.executable,
                 "-m",
-                "markd.cli.main",
+                "markdpy.cli.main",
                 "export",
                 str(source),
                 str(output),
@@ -77,7 +77,7 @@ class TestCliExportCommand:
         output = tmp_path / "output"
 
         result = subprocess.run(
-            [sys.executable, "-m", "markd.cli.main", "export", str(nonexistent), str(output)],
+            [sys.executable, "-m", "markdpy.cli.main", "export", str(nonexistent), str(output)],
             capture_output=True,
             text=True,
             timeout=10,
@@ -97,7 +97,7 @@ class TestCliExportCommand:
             [
                 sys.executable,
                 "-m",
-                "markd.cli.main",
+                "markdpy.cli.main",
                 "export",
                 str(source),
                 str(output),
@@ -114,7 +114,7 @@ class TestCliExportCommand:
     def test_export_help_shows_options(self) -> None:
         """Test that export --help shows available options."""
         result = subprocess.run(
-            [sys.executable, "-m", "markd.cli.main", "export", "--help"],
+            [sys.executable, "-m", "markdpy.cli.main", "export", "--help"],
             capture_output=True,
             text=True,
             timeout=5,

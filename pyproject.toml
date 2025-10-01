@@ -3,14 +3,14 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project]
-name = "markd"
+name = "markdpy"
 version = "0.1.0"
-description = "Python-based Markdown preview server with live reload, themes, and static export"
+description = "Python-based markdown preview server with live reload, themes, and static export"
 readme = "README.md"
 requires-python = ">=3.10"
 license = {text = "MIT"}
 authors = [
-    {name = "markd contributors"}
+    {name = "markdpy contributors"}
 ]
 keywords = ["markdown", "preview", "server", "live-reload", "documentation"]
 classifiers = [
@@ -51,16 +51,16 @@ dev = [
 ]
 
 [project.scripts]
-markd = "markd.cli.main:app"
+markdpy = "markdpy.cli.main:app"
 
 [project.urls]
-Homepage = "https://github.com/eosho/markd"
-Documentation = "https://github.com/eosho/markd#readme"
-Repository = "https://github.com/eosho/markd"
-Issues = "https://github.com/eosho/markd/issues"
+Homepage = "https://github.com/eosho/markdpy"
+Documentation = "https://github.com/eosho/markdpy#readme"
+Repository = "https://github.com/eosho/markdpy"
+Issues = "https://github.com/eosho/markdpy/issues"
 
 [tool.hatch.build.targets.wheel]
-packages = ["src/markd"]
+packages = ["src/markdpy"]
 
 [tool.ruff]
 line-length = 100
@@ -150,7 +150,7 @@ addopts = [
     "-ra",
     "--strict-markers",
     "--strict-config",
-    "--cov=markd",
+    "--cov=markdpy",
     "--cov-report=term-missing:skip-covered",
     "--cov-report=html",
     "--cov-report=xml",
@@ -162,7 +162,7 @@ markers = [
 ]
 
 [tool.coverage.run]
-source = ["src/markd"]
+source = ["src/markdpy"]
 branch = true
 parallel = true
 omit = [

@@ -5,8 +5,8 @@ from pathlib import Path
 
 import markdown
 
-from markd.config.models import RenderConfig
-from markd.renderer.link_processor import LinkProcessorExtension
+from markdpy.config.models import RenderConfig
+from markdpy.renderer.link_processor import LinkProcessorExtension
 
 
 class MarkdownRenderer:

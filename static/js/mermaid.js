@@ -1,6 +1,6 @@
 /**
- * Mermaid Diagram Initialization for markd
- * Configures and initializes Mermaid.js for rendering diagrams in Markdown
+ * Mermaid Diagram Initialization for markdpy
+ * Configures and initializes Mermaid.js for rendering diagrams in markdown
  */
 
 (function() {
@@ -20,7 +20,7 @@
     function initMermaid() {
         // Check if Mermaid is loaded
         if (typeof mermaid === 'undefined') {
-            console.log('[markd] Mermaid.js not loaded, skipping diagram initialization');
+            console.log('[markdpy] Mermaid.js not loaded, skipping diagram initialization');
             return;
         }
 
@@ -61,13 +61,13 @@
                 }
             });
 
-            console.log('[markd] Mermaid.js initialized with theme:', getMermaidTheme());
+            console.log('[markdpy] Mermaid.js initialized with theme:', getMermaidTheme());
 
             // Re-render diagrams when theme changes
             observeThemeChanges();
 
         } catch (error) {
-            console.error('[markd] Error initializing Mermaid:', error);
+            console.error('[markdpy] Error initializing Mermaid:', error);
         }
     }
 
@@ -107,10 +107,10 @@
             // Render the diagrams
             mermaid.init(undefined, document.querySelectorAll('.mermaid[data-processed="false"]'));
             
-            console.log('[markd] Mermaid diagrams re-rendered');
+            console.log('[markdpy] Mermaid diagrams re-rendered');
 
         } catch (error) {
-            console.error('[markd] Error re-rendering Mermaid diagrams:', error);
+            console.error('[markdpy] Error re-rendering Mermaid diagrams:', error);
         }
     }
 
@@ -121,7 +121,7 @@
         const observer = new MutationObserver((mutations) => {
             mutations.forEach((mutation) => {
                 if (mutation.type === 'attributes' && mutation.attributeName === 'data-theme') {
-                    console.log('[markd] Theme changed, re-rendering Mermaid diagrams');
+                    console.log('[markdpy] Theme changed, re-rendering Mermaid diagrams');
                     rerenderDiagrams();
                 }
             });
@@ -151,7 +151,7 @@
                     initMermaid();
                 } else if (attempts >= maxAttempts) {
                     clearInterval(checkInterval);
-                    console.log('[markd] Mermaid.js not loaded after waiting');
+                    console.log('[markdpy] Mermaid.js not loaded after waiting');
                 }
             }, 100);
         }
@@ -165,7 +165,7 @@
     }
 
     // Export for programmatic access
-    window.markdMermaid = {
+    window.markdpyMermaid = {
         initMermaid,
         rerenderDiagrams,
         getMermaidTheme

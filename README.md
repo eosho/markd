@@ -1,13 +1,21 @@
-# markd
+```
+ ███╗   ███╗ █████╗ ██████╗ ██╗  ██╗██████╗ ██████╗ ██╗   ██╗
+ ████╗ ████║██╔══██╗██╔══██╗██║ ██╔╝██╔══██╗██╔══██╗╚██╗ ██╔╝
+ ██╔████╔██║███████║██████╔╝█████╔╝ ██║  ██║██████╔╝ ╚████╔╝
+ ██║╚██╔╝██║██╔══██║██╔══██╗██╔═██╗ ██║  ██║██╔═══╝   ╚██╔╝
+ ██║ ╚═╝ ██║██║  ██║██║  ██║██║  ██╗██████╔╝██║        ██║
+ ╚═╝     ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝╚═════╝ ╚═╝        ╚═╝
+```
 
-[![Pytest](https://img.shields.io/badge/Pytest-fff?logo=pytest&logoColor=000)](#)
-[![GitHub Release](https://img.shields.io/github/v/release/eosho/markd?sytle=flat&label=Release&labelColor=black&color=%237B2CBF)](https://github.com/eosho/markd/releases)
-[![GitHub License](https://img.shields.io/github/license/eosho/markd?style=flat&label=License&labelColor=black&color=%237B2CBF)](LICENSE)
-[![GitHub Repo stars](https://img.shields.io/github/stars/eosho/markd?style=flat&logo=github&logoColor=white&label=Stars&labelColor=black&color=7B2CBF)](https://github.com/eosho/markd)
+## markdpy - markdown in python
 
-Python-based Markdown preview server with live reload, themes, diagrams, and static export capabilities.
+Python-based markdown preview server with live reload, themes, diagrams, and static export capabilities.
 
-[![Terminal](./static/images/terminal.png)]()
+[![Pytest](https://img.shields.io/badge/Pytest-fff?logo=pytest&labelColor=black&color=%237B2CBF)](#)
+[![GitHub Release](https://img.shields.io/github/v/release/eosho/markdpy?sytle=flat&label=Release&labelColor=black&color=%237B2CBF)](https://github.com/eosho/markdpy/releases)
+[![GitHub License](https://img.shields.io/github/license/eosho/markdpy?style=flat&label=License&labelColor=black&color=%237B2CBF)](LICENSE)
+[![GitHub Repo stars](https://img.shields.io/github/stars/eosho/markdpy?style=flat&logo=github&logoColor=white&label=Stars&labelColor=black&color=7B2CBF)](https://github.com/eosho/markdpy)
+
 
 ## ✨ Features
 
@@ -15,7 +23,7 @@ Python-based Markdown preview server with live reload, themes, diagrams, and sta
 - 🎨 **Multiple Themes**: Light and dark themes with smooth toggle
 - 📊 **Mermaid Diagrams**: Render flowcharts, sequence diagrams, and more
 - 📐 **MathJax Support**: Beautiful mathematical formulas (KaTeX-ready)
-- 📁 **Directory Navigation**: Browse multiple Markdown files with sidebar
+- 📁 **Directory Navigation**: Browse multiple markdown files with sidebar
 - 📤 **Static Export**: Generate self-contained HTML for sharing
 - 🔒 **Secure by Default**: Directory traversal prevention, CSP headers
 - ⚡ **Fast**: <100ms rendering, <200ms reload latency
@@ -26,8 +34,8 @@ Python-based Markdown preview server with live reload, themes, diagrams, and sta
 ### From source
 
 ```bash
-git clone https://github.com/eosho/markd.git
-cd markd
+git clone https://github.com/eosho/markdpy.git
+cd markdpy
 pip install -e .
 ```
 
@@ -35,10 +43,10 @@ pip install -e .
 
 ### Serve a Single File
 
-The simplest way to preview a Markdown file:
+The simplest way to preview a markdown file:
 
 ```bash
-markd README.md
+markdpy README.md
 ```
 
 This will:
@@ -48,10 +56,10 @@ This will:
 
 ### Serve a Directory
 
-Preview all Markdown files in a directory with navigation:
+Preview all markdown files in a directory with navigation:
 
 ```bash
-markd docs/
+markdpy docs/
 ```
 
 Features:
@@ -62,24 +70,24 @@ Features:
 ### Custom Configuration
 
 ```bash
-markd docs/ --port 3000 --theme dark --no-open
+markdpy docs/ --port 3000 --theme dark --no-open
 ```
 
 ## 📖 Detailed Usage
 
 ### `serve` Command
 
-Start a Markdown preview server.
+Start a markdown preview server.
 
 ```bash
-markd serve [PATH] [OPTIONS]
+markdpy serve [PATH] [OPTIONS]
 ```
 
 #### Arguments
 
 | Argument | Type | Default | Description |
 |----------|------|---------|-------------|
-| `PATH` | Path | `.` (current directory) | Path to Markdown file or directory to serve |
+| `PATH` | Path | `.` (current directory) | Path to markdown file or directory to serve |
 
 #### Options
 
@@ -96,37 +104,37 @@ markd serve [PATH] [OPTIONS]
 
 **Serve with custom port:**
 ```bash
-markd docs/ --port 3000
+markdpy docs/ --port 3000
 ```
 
 **Dark theme without auto-opening:**
 ```bash
-markd README.md --theme dark --no-open
+markdpy README.md --theme dark --no-open
 ```
 
 **Debug mode with live reload disabled:**
 ```bash
-markd docs/ --log-level DEBUG --no-reload
+markdpy docs/ --log-level DEBUG --no-reload
 ```
 
 **Bind to all interfaces (accessible from network):**
 ```bash
-markd docs/ --host 0.0.0.0 --port 8080
+markdpy docs/ --host 0.0.0.0 --port 8080
 ```
 
 ### `export` Command
 
-Export Markdown to static HTML files.
+Export markdown to static HTML files.
 
 ```bash
-markd export SOURCE [OUTPUT] [OPTIONS]
+markdpy export SOURCE [OUTPUT] [OPTIONS]
 ```
 
 #### Arguments
 
 | Argument | Type | Default | Description |
 |----------|------|---------|-------------|
-| `SOURCE` | Path | **Required** | Source Markdown file or directory |
+| `SOURCE` | Path | **Required** | Source markdown file or directory |
 | `OUTPUT` | Path | `output` | Output directory for exported HTML |
 
 #### Options
@@ -140,22 +148,22 @@ markd export SOURCE [OUTPUT] [OPTIONS]
 
 **Export single file:**
 ```bash
-markd export README.md output/
+markdpy export README.md output/
 ```
 
 **Export directory with dark theme:**
 ```bash
-markd export docs/ site/ --theme dark
+markdpy export docs/ site/ --theme dark
 ```
 
 **Export with minification:**
 ```bash
-markd export docs/ site/ --minify
+markdpy export docs/ site/ --minify
 ```
 
-## 📝 Supported Markdown Features
+## 📝 Supported markdown Features
 
-### GitHub Flavored Markdown (GFM)
+### GitHub Flavored markdown (GFM)
 
 - **Tables**: Full table support with alignment
 - **Task Lists**: `- [ ]` and `- [x]` checkboxes
@@ -168,7 +176,7 @@ Syntax highlighting for 100+ languages using Pygments:
 
 ```python
 def hello_world():
-    print("Hello from markd!")
+    print("Hello from markdpy!")
 ```
 
 ### Mermaid Diagrams
@@ -205,13 +213,13 @@ Configure via command-line options or environment variables:
 
 | Setting | CLI Option | Environment Variable | Default |
 |---------|------------|---------------------|---------|
-| Host | `--host` | `MARKD_HOST` | `127.0.0.1` |
-| Port | `--port` | `MARKD_PORT` | `8000` |
-| Theme | `--theme` | `MARKD_THEME` | `light` |
-| Log Level | `--log-level` | `MARKD_LOG_LEVEL` | `INFO` |### Browser Configuration
+| Host | `--host` | `HOST` | `127.0.0.1` |
+| Port | `--port` | `PORT` | `8000` |
+| Theme | `--theme` | `THEME` | `light` |
+| Log Level | `--log-level` | `LOG_LEVEL` | `INFO` |### Browser Configuration
 
 Themes are stored in browser `localStorage`:
-- Key: `markd-theme`
+- Key: `--theme`
 - Values: `light` | `dark`
 
 ## 🧪 Development
@@ -220,8 +228,8 @@ Themes are stored in browser `localStorage`:
 
 ```bash
 # Clone repository
-git clone https://github.com/eosho/markd.git
-cd markd
+git clone https://github.com/eosho/markdpy.git
+cd markdpy
 
 # Create virtual environment
 python -m venv .venv
@@ -238,7 +246,7 @@ pip install -e ".[dev]"
 pytest
 
 # Run with coverage
-pytest --cov=src/markd --cov-report=html
+pytest --cov=src/markdpy --cov-report=html
 
 # Run specific test file
 pytest tests/integration/test_http_view.py
@@ -266,7 +274,7 @@ mypy src/
 
 ```bash
 # Error: Port 8000 is already in use
-markd README.md --port 8080
+markdpy README.md --port 8080
 ```
 
 ### Live Reload Not Working
@@ -280,7 +288,7 @@ markd README.md --port 8080
 
 1. Clear browser cache (Ctrl+Shift+R or Cmd+Shift+R)
 2. Check browser console for CSS loading errors
-3. Verify `src/markd/static/css/themes/` directory exists
+3. Verify `src/markdpy/static/css/themes/` directory exists
 
 ### Mermaid Diagrams Not Rendering
 
@@ -290,4 +298,4 @@ markd README.md --port 8080
 
 ---
 
-**Made with ❤️ by the markd team**
+**Made with ❤️ by the markdpy team**
