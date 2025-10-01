@@ -1,4 +1,4 @@
-"""Banner display utilities for markd CLI."""
+"""Banner display utilities for markdpy CLI."""
 
 from pathlib import Path
 

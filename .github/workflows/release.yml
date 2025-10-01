@@ -1,4 +1,4 @@
-name: Release
+name: Release - markdpy
 
 on:
   push:
@@ -41,7 +41,7 @@ jobs:
       - name: Upload build artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: markd-dist
+          name: markdpy-dist
           path: dist/*
 
       - name: Generate changelog

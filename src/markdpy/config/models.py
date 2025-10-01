@@ -1,4 +1,4 @@
-"""Core data models for markd."""
+"""Core data models for markdpy."""
 
 import hashlib
 from dataclasses import dataclass, field
