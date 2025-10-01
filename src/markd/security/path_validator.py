@@ -96,11 +96,11 @@ def validate_path(requested_path: Path | str, root_path: Path) -> Path:
     else:
         path_str = str(requested_path)
 
-    # Check for path traversal patterns
-    if _contains_path_traversal(path_str):
+    # Reject outright if the path is absolute
+    if requested_path.is_absolute():
         raise SecurityError(
-            f"Path traversal attempt detected: {requested_path}. "
-            "Path contains forbidden patterns (.., ~, //, etc.)"
+            f"Absolute path supplied: {requested_path}. "
+            "User input must be a relative path within the root directory."
         )
 
     # Validate each path component
