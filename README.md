@@ -1,13 +1,13 @@
 # markd
 
-[![Tests](https://img.shields.io/badge/tests-50%20passing-brightgreen)]()
-[![Coverage](https://img.shields.io/badge/coverage-53.58%25-yellow)]()
-[![Python](https://img.shields.io/badge/python-3.10%2B-blue)]()
-[![License](https://img.shields.io/badge/license-MIT-green)]()
+[![Pytest](https://img.shields.io/badge/Pytest-fff?logo=pytest&logoColor=000)](#)
+[![GitHub Release](https://img.shields.io/github/v/release/eosho/markd?sytle=flat&label=Release&labelColor=black&color=%237B2CBF)](https://github.com/eosho/markd/releases)
+[![GitHub License](https://img.shields.io/github/license/eosho/markd?style=flat&label=License&labelColor=black&color=%237B2CBF)](LICENSE)
+[![GitHub Repo stars](https://img.shields.io/github/stars/eosho/markd?style=flat&logo=github&logoColor=white&label=Stars&labelColor=black&color=7B2CBF)](https://github.com/eosho/markd)
 
 Python-based Markdown preview server with live reload, themes, diagrams, and static export capabilities.
 
-[![Terminal](src/markd/static/images/terminal.png)]()
+[![Terminal](./static/images/terminal.png)]()
 
 ## ✨ Features
 
@@ -158,7 +158,7 @@ markd export docs/ site/ --minify
 ### GitHub Flavored Markdown (GFM)
 
 - **Tables**: Full table support with alignment
-- **Task Lists**: `- [ ]` and `- [x]` checkboxes  
+- **Task Lists**: `- [ ]` and `- [x]` checkboxes
 - **Strikethrough**: `~~deleted text~~`
 - **Autolinks**: Automatic URL detection
 
@@ -204,7 +204,7 @@ $$
 Configure via command-line options or environment variables:
 
 | Setting | CLI Option | Environment Variable | Default |
-|---------|------------|---------------------|---------|  
+|---------|------------|---------------------|---------|
 | Host | `--host` | `MARKD_HOST` | `127.0.0.1` |
 | Port | `--port` | `MARKD_PORT` | `8000` |
 | Theme | `--theme` | `MARKD_THEME` | `light` |
@@ -253,7 +253,7 @@ pytest -v
 # Format code
 black src/ tests/
 
-# Lint code  
+# Lint code
 ruff check src/ tests/
 
 # Type checking
