@@ -98,7 +98,7 @@ def serve(
             port=port,
             serve_path=config.serve_path,
             theme=config.theme,
-            reload_enabled=config.reload_enabled
+            reload_enabled=config.reload_enabled,
         )
 
         # Open browser if requested
@@ -217,6 +217,7 @@ def main() -> None:
 
     def create_app_factory() -> "fastapi.FastAPI":  # type: ignore # noqa: F821
         from markd.server.app import create_app
+
         return create_app(_config) if _config else create_app(ServerConfig())
 
     app()

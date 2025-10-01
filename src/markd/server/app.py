@@ -267,7 +267,7 @@ def create_app(config: ServerConfig) -> FastAPI:
                 # Render as preformatted text
                 rendered_html = (
                     f'<pre style="white-space: pre-wrap; font-family: monospace; '
-                    f'background: var(--code-bg); padding: 20px; border-radius: 6px; '
+                    f"background: var(--code-bg); padding: 20px; border-radius: 6px; "
                     f'overflow-x: auto;">{content}</pre>'
                 )
             else:

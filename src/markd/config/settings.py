@@ -14,6 +14,7 @@ DEFAULT_LOG_LEVEL = os.getenv("MARKD_LOG_LEVEL", "INFO")
 # Rendering defaults
 DEFAULT_RENDER_CONFIG = RenderConfig.default()
 
+
 # Server defaults
 def get_default_server_config(serve_path: Path | None = None) -> ServerConfig:
     """Get default server configuration."""

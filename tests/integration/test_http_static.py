@@ -53,9 +53,7 @@ class TestStaticEndpoint:
             # May not exist yet, but should be accessible path
             assert response.status_code in (200, 404)
 
-    def test_static_directory_traversal_blocked(
-        self, test_client_single_file: TestClient
-    ) -> None:
+    def test_static_directory_traversal_blocked(self, test_client_single_file: TestClient) -> None:
         """Test that directory traversal is blocked in static paths."""
         response = test_client_single_file.get("/static/../../etc/passwd")
 

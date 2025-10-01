@@ -1,6 +1,5 @@
 """Contract tests for WebSocket /ws endpoint."""
 
-
 import pytest
 from fastapi.testclient import TestClient
 
@@ -15,9 +14,7 @@ class TestWebSocketEndpoint:
             # Connection should be established
             assert websocket is not None
 
-    def test_websocket_receives_reload_messages(
-        self, test_client_single_file: TestClient
-    ) -> None:
+    def test_websocket_receives_reload_messages(self, test_client_single_file: TestClient) -> None:
         """Test that WebSocket receives reload messages."""
         with test_client_single_file.websocket_connect("/ws"):
             # May receive a message immediately or after a timeout
@@ -33,9 +30,7 @@ class TestWebSocketEndpoint:
             # Connection should remain open
             pass
 
-    def test_websocket_watch_file_registration(
-        self, test_client_single_file: TestClient
-    ) -> None:
+    def test_websocket_watch_file_registration(self, test_client_single_file: TestClient) -> None:
         """Test that clients can register to watch specific files."""
         with test_client_single_file.websocket_connect("/ws") as websocket:
             # Send watch request
@@ -43,9 +38,7 @@ class TestWebSocketEndpoint:
             # Should not disconnect
             pass
 
-    def test_websocket_reload_message_structure(
-        self, test_client_single_file: TestClient
-    ) -> None:
+    def test_websocket_reload_message_structure(self, test_client_single_file: TestClient) -> None:
         """Test that reload messages have expected structure."""
         with test_client_single_file.websocket_connect("/ws") as websocket:
             # Wait briefly for any messages

@@ -124,9 +124,7 @@ class StaticSiteGenerator:
 
         return exported_files
 
-    def _create_html_document(
-        self, title: str, content: str, theme: str = "light"
-    ) -> str:
+    def _create_html_document(self, title: str, content: str, theme: str = "light") -> str:
         """
         Create a standalone HTML document.
 

@@ -8,9 +8,7 @@ from fastapi.testclient import TestClient
 class TestApiFilesEndpoint:
     """Test suite for /api/files endpoint."""
 
-    def test_directory_mode_returns_file_tree_json(
-        self, test_client_directory: TestClient
-    ) -> None:
+    def test_directory_mode_returns_file_tree_json(self, test_client_directory: TestClient) -> None:
         """Test that directory mode returns file tree as JSON."""
         response = test_client_directory.get("/api/files")
 

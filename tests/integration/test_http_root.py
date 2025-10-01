@@ -15,7 +15,7 @@ class TestRootEndpoint:
         assert response.status_code == 200
         assert response.headers["content-type"] == "text/html; charset=utf-8"
         assert "<!DOCTYPE html>" in response.text
-        assert "<div class=\"rendered-content\">" in response.text
+        assert '<div class="rendered-content">' in response.text
 
     def test_single_file_includes_live_reload_script(
         self, test_client_single_file: TestClient
