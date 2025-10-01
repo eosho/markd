@@ -61,6 +61,7 @@ jobs:
           git diff --cached --quiet || git commit -m "docs: update changelog for $GITHUB_REF_NAME [skip ci]"
           git push origin HEAD:main
 
+
       - name: Create Release
         uses: mikepenz/action-gh-release@v0.2.0-a03
         with:
