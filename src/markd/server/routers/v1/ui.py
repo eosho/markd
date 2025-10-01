@@ -153,9 +153,8 @@ async def view_file(
         requested = Path(file_path)
         abs_path = validate_path(requested, validation_root)
 
-        # Check if file exists
-        if not abs_path.exists():
-            raise FileNotFoundError(f"File not found: {file_path}")
+        # File existence check is performed inside validate_path
+
 
         # For markdown files, render normally
         if abs_path.suffix.lower() in (".md", ".markdown"):
