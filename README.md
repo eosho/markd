@@ -7,7 +7,7 @@
 
 Python-based Markdown preview server with live reload, themes, diagrams, and static export capabilities.
 
-[![Terminal](.docs/assets/terminal.png)]()
+[![Terminal](src/markd/static/images/terminal.png)]()
 
 ## ✨ Features
 
@@ -214,20 +214,10 @@ Supported diagram types:
 Inline math: `$E = mc^2$`
 
 Block math:
-```
+
 $$
 \int_0^\infty e^{-x^2} dx = \frac{\sqrt{\pi}}{2}
 $$
-```
-
-### Additional Features
-
-- **Table of Contents**: Auto-generated with permalinks
-- **Admonitions**: Note, warning, tip callouts
-- **Footnotes**: Reference-style footnotes
-- **Emoji**: `:smile:` → 😊
-
-
 
 ## 🔧 Configuration
 

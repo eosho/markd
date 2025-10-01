@@ -156,6 +156,15 @@ class RenderConfig:
               "pymdownx.snippets": {
                   "check_paths": True,
               },
+              "pymdownx.superfences": {
+                  "custom_fences": [
+                      {
+                          "name": "mermaid",
+                          "class": "mermaid",
+                          "format": lambda src, *args, **kwargs: f'<div class="mermaid">{src}</div>',
+                      }
+                  ]
+              },
           },
           syntax_theme="monokai",
           enable_toc=True,

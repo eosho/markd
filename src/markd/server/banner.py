@@ -53,7 +53,7 @@ def print_banner(host: str, port: int, serve_path: Path, theme: str, reload_enab
     info_content.append("\n")
 
     info_content.append("🔗 ", style="bright_white")
-    info_content.append("Raw URL for Debugging:     ", style="dim")
+    info_content.append("Debugging:   ", style="dim")
     info_content.append(f"http://{host}:{port}/raw", style="bright_green bold")
     info_content.append("\n")
 

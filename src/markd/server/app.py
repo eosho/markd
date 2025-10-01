@@ -330,6 +330,91 @@ def create_app(config: ServerConfig) -> FastAPI:
                 status_code=500,
             )
 
+    # Raw endpoint: get raw markdown content (single file mode only)
+    @app.get("/raw", response_class=Response)
+    async def get_raw_content_single() -> Response:
+        """Get raw markdown content of the served file (single file mode only)."""
+        serve_path = app.state.config.serve_path
+        
+        # Only allow /raw endpoint when serving a single file
+        if serve_path.is_dir():
+            raise HTTPException(
+                status_code=403, 
+                detail="/raw endpoint is only available when serving a single file"
+            )
+        
+        # Only allow markdown files for /raw endpoint
+        if serve_path.suffix.lower() not in (".md", ".markdown"):
+            raise HTTPException(
+                status_code=400, 
+                detail="Only markdown files (.md, .markdown) are supported by /raw endpoint"
+            )
+
+        try:
+            # Read and return raw content of the served file
+            content = serve_path.read_text(encoding="utf-8")
+            return Response(
+                content=content,
+                media_type="text/plain; charset=utf-8",
+                headers={
+                    "Content-Disposition": f'inline; filename="{serve_path.name}"',
+                    "X-Content-Type-Options": "nosniff",
+                }
+            )
+
+        except FileNotFoundError:
+            raise HTTPException(status_code=404, detail="File not found")
+        except Exception as e:
+            raise HTTPException(status_code=500, detail=str(e))
+
+    # Raw endpoint with path: get raw markdown content (single file mode only)
+    @app.get("/raw/{file_path:path}", response_class=Response)
+    async def get_raw_content(file_path: str) -> Response:
+        """Get raw markdown content without rendering (single file mode only)."""
+        serve_path = app.state.config.serve_path
+        
+        # Only allow /raw endpoint when serving a single file
+        if serve_path.is_dir():
+            raise HTTPException(
+                status_code=403, 
+                detail="/raw endpoint is only available when serving a single file"
+            )
+        
+        # For validation, use parent directory since we're serving a single file
+        validation_root = serve_path.parent
+
+        try:
+            # Validate path security
+            requested = Path(file_path)
+            abs_path = validate_path(requested, validation_root)
+
+            # Check if file exists
+            if not abs_path.exists():
+                raise HTTPException(status_code=404, detail=f"File not found: {file_path}")
+
+            # Only allow markdown files for /raw endpoint
+            if abs_path.suffix.lower() not in (".md", ".markdown"):
+                raise HTTPException(
+                    status_code=400, 
+                    detail="Only markdown files (.md, .markdown) are supported by /raw endpoint"
+                )
+
+            # Read and return raw content
+            content = abs_path.read_text(encoding="utf-8")
+            return Response(
+                content=content,
+                media_type="text/plain; charset=utf-8",
+                headers={
+                    "Content-Disposition": f'inline; filename="{abs_path.name}"',
+                    "X-Content-Type-Options": "nosniff",
+                }
+            )
+
+        except SecurityError:
+            raise HTTPException(status_code=403, detail="Access forbidden")
+        except FileNotFoundError:
+            raise HTTPException(status_code=404, detail="File not found")
+
     # API endpoint: get file tree
     @app.get("/api/files")
     async def api_files() -> dict:
