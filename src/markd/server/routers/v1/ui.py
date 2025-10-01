@@ -330,9 +330,13 @@ async def get_raw_content(
         # Validate path security
         abs_path = validate_path(file_path, validation_root)
 
-        # Check if file exists
+        # Check if file exists and is a regular file (not symlink/directory/etc)
         if not abs_path.exists():
             raise HTTPException(status_code=404, detail=f"File not found: {file_path}")
+        if not abs_path.is_file():
+            raise HTTPException(status_code=404, detail=f"Path is not a regular file: {file_path}")
+        if abs_path.is_symlink():
+            raise HTTPException(status_code=403, detail="Symlinks are not allowed")
 
         # Only allow markdown files for /raw endpoint
         if abs_path.suffix.lower() not in (".md", ".markdown"):
