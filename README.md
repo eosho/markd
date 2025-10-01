@@ -1,11 +1,13 @@
 # markd
 
-> Python-based Markdown preview server with live reload, themes, diagrams, and static export capabilities.
-
 [![Tests](https://img.shields.io/badge/tests-50%20passing-brightgreen)]()
 [![Coverage](https://img.shields.io/badge/coverage-53.58%25-yellow)]()
 [![Python](https://img.shields.io/badge/python-3.10%2B-blue)]()
 [![License](https://img.shields.io/badge/license-MIT-green)]()
+
+Python-based Markdown preview server with live reload, themes, diagrams, and static export capabilities.
+
+[![Terminal](.docs/assets/terminal.png)]()
 
 ## ✨ Features
 
