@@ -45,7 +45,7 @@ jobs:
           path: dist/*
 
       - name: Generate changelog
-        uses: mikepenz/release-changelog-builder-action@v4
+        uses: mikepenz/release-changelog-builder-action@v5
         id: github_release
         with:
           configuration: ".github/changelog-config.json"
@@ -54,6 +54,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Create Release
-        uses: mikepenz/action-gh-release@v0.2.0-a03
+        uses: mikepenz/action-gh-release@v1
         with:
           body: ${{steps.github_release.outputs.changelog}}
