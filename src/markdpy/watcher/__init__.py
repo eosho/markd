@@ -1,4 +1,4 @@
-"""File system watching components for markd."""
+"""File system watching components for markdpy."""
 
 from .observer import DebouncedEventHandler, FileObserver
 
