@@ -177,8 +177,7 @@ class TelemetryClient:
         )
 
         try:
-            with httpx.Client(timeout=3.0) as client:
-                client.post(self.ENDPOINT, json=asdict(payload))
+            httpx.post(self.ENDPOINT, json=asdict(payload), timeout=3.0)
         except Exception:
             pass  # never crash the app
 
