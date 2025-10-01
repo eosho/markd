@@ -156,10 +156,9 @@ class RenderConfig:
                         {
                             "name": "mermaid",
                             "class": "mermaid",
-                            "format": lambda
-                                src,
-                                *args,
-                                **kwargs: f'<div class="mermaid">{src}</div>',
+                            "format": lambda src,
+                            *args,
+                            **kwargs: f'<div class="mermaid">{src}</div>',
                         }
                     ]
                 },

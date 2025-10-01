@@ -164,9 +164,7 @@ def validate_path(requested_path: Path | str, root_path: Path) -> Path:
                 )
         except (OSError, RuntimeError) as e:
             # If we can't resolve symlinks, raise a security error
-            raise SecurityError(
-                f"Failed to resolve symlinks for {requested_path}: {e}"
-            ) from e
+            raise SecurityError(f"Failed to resolve symlinks for {requested_path}: {e}") from e
 
         # Check if path exists
         if not abs_requested.exists():
