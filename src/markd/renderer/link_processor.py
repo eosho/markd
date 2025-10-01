@@ -123,7 +123,7 @@ class LinkProcessorExtension(Extension):
         }
         super().__init__(**kwargs)
 
-    def extend_markdown(self, md):
+    def extendMarkdown(self, md):  # noqa: N802
         """Register the extension.
 
         Args:
@@ -134,6 +134,6 @@ class LinkProcessorExtension(Extension):
         md.treeprocessors.register(processor, "link_processor", 10)
 
 
-def make_extension(**kwargs):
+def makeExtension(**kwargs):  # noqa: N802
     """Create the extension."""
     return LinkProcessorExtension(**kwargs)
