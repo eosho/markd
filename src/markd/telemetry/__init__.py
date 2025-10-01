@@ -43,7 +43,7 @@ def track_error() -> None:
 
 def flush() -> bool:
     """Flush pending telemetry data.
-    
+
     Returns:
         bool: True if data was processed and sent, False if no action taken.
     """

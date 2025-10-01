@@ -150,7 +150,7 @@ class TelemetryClient:
 
         This will reset in-memory counters after attempting to send.
         The client will fail silently if the network is unavailable.
-        
+
         Returns:
             bool: True if data was processed and sent, False if no action taken.
         """
@@ -187,7 +187,7 @@ class TelemetryClient:
         self._errors = 0
         self.state.last_sent = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
         self._save()
-        
+
         return True
 
     # -----------------------
