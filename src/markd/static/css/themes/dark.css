@@ -23,6 +23,14 @@
     --toggle-hover-bg: #495057;
     --toggle-shadow: rgba(0, 0, 0, 0.5);
     
+    /* Buttons */
+    --button-bg: #495057;
+    --button-text: #f8f9fa;
+    --button-border: #6c757d;
+    --button-hover-bg: #5a6268;
+    --primary-bg: #0d6efd;
+    --primary-hover-bg: #0b5ed7;
+    
     /* Shadows */
     --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
     --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.4);
