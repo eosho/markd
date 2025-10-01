@@ -6,6 +6,7 @@ This module creates and configures the FastAPI application with:
 - Middleware for security headers and caching
 - Static file serving
 - File watching and live reload
+- Telemetry initialization
 """
 
 import asyncio
@@ -15,10 +16,12 @@ from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
 
+from markd import __version__
 from markd.config.models import ServerConfig
 from markd.server.middleware import add_security_headers
 from markd.server.routers.v1 import api, ui, ws
 from markd.server.utils import setup_app_state
+from markd.telemetry import flush, init_telemetry
 
 logger = logging.getLogger(__name__)
 
@@ -45,16 +48,22 @@ def create_app(config: ServerConfig) -> FastAPI:
     async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
         """Handle application lifespan events.
 
-        Startup: Initialize event loop and start file watcher
-        Shutdown: Stop file watcher
+        Startup: Initialize telemetry, event loop and start file watcher
+        Shutdown: Flush telemetry and stop file watcher
         """
-        # Startup: store event loop and start file watcher
+        # Startup: initialize telemetry with app version
+        init_telemetry(__version__)
+
+        # Store event loop and start file watcher
         app.state.event_loop = asyncio.get_running_loop()
 
         if app.state.file_observer:
             app.state.file_observer.start()
 
         yield
+
+        # Shutdown: flush telemetry data and stop file watcher
+        flush()
 
         if app.state.file_observer:
             app.state.file_observer.stop()

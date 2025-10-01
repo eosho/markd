@@ -1,5 +1,6 @@
 """CLI main entry point using Typer."""
 
+import time
 import webbrowser
 from pathlib import Path
 
@@ -7,8 +8,10 @@ import typer
 import uvicorn
 from rich.console import Console
 
+from markd import __version__
 from markd.config.models import VALID_THEMES, ServerConfig
 from markd.config.settings import DEFAULT_HOST, DEFAULT_PORT, DEFAULT_THEME
+from markd.telemetry import flush, init_telemetry, track_error
 
 app = typer.Typer(
     name="markd",
@@ -163,9 +166,14 @@ def export(
     ),
 ) -> None:
     """Export Markdown to static HTML files."""
+    # Initialize telemetry for CLI usage
+    init_telemetry(__version__)
+    start_time = time.time()
+
     try:
         # Validate source path
         if not source.exists():
+            track_error()  # Track validation error
             console.print(f"[red]✗[/red] Source not found: {source}", style="bold")
             raise typer.Exit(code=3)
 
@@ -198,15 +206,27 @@ def export(
 
         console.print(f"\n[bold green]Export complete![/bold green] Output: {output.absolute()}\n")
 
+        # Track successful export
+        export_time_ms = (time.time() - start_time) * 1000
+        from markd.telemetry import track_render
+
+        track_render(export_time_ms)  # Reuse render tracking for export operations
+
     except FileNotFoundError as e:
+        track_error()  # Track file not found error
         console.print(f"[red]✗[/red] {e}", style="bold")
         raise typer.Exit(code=3)
     except ValueError as e:
+        track_error()  # Track validation error
         console.print(f"[red]✗[/red] {e}", style="bold")
         raise typer.Exit(code=2)
     except Exception as e:
+        track_error()  # Track any other error
         console.print(f"[red]✗[/red] Error: {e}", style="bold")
         raise typer.Exit(code=1)
+    finally:
+        # Ensure telemetry is flushed before CLI exits
+        flush()
 
 
 def main() -> None:
