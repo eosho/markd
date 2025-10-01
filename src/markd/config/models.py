@@ -13,14 +13,14 @@ VALID_THEMES = ["light", "dark", "catppuccin-mocha", "catppuccin-latte"]
 class MarkdownFile:
     """Represents a Markdown file in the file system."""
 
-    path: Path  # Absolute path to file
-    relative_path: Path  # Path relative to serve root
-    content: str  # Raw Markdown content
-    content_hash: str  # SHA256 hash for caching
-    rendered_html: str | None = None  # Cached rendered HTML
-    metadata: dict[str, Any] = field(default_factory=dict)  # Frontmatter metadata
-    modified_time: float = 0.0  # Last modification timestamp
-    file_size: int = 0  # Size in bytes
+    path: Path
+    relative_path: Path
+    content: str
+    content_hash: str
+    rendered_html: str | None = None
+    metadata: dict[str, Any] = field(default_factory=dict)
+    modified_time: float = 0.0
+    file_size: int = 0
 
     def needs_rerender(self) -> bool:
         """Check if file content changed since last render."""
@@ -40,11 +40,11 @@ class MarkdownFile:
 class DirectoryListing:
     """Represents a directory with Markdown files."""
 
-    path: Path  # Absolute directory path
-    relative_path: Path  # Path relative to serve root
-    files: list[MarkdownFile] = field(default_factory=list)  # Markdown files in directory
-    subdirectories: list["DirectoryListing"] = field(default_factory=list)  # Nested directories
-    index_file: MarkdownFile | None = None  # index.md or README.md if present
+    path: Path
+    relative_path: Path
+    files: list[MarkdownFile] = field(default_factory=list)
+    subdirectories: list["DirectoryListing"] = field(default_factory=list)
+    index_file: MarkdownFile | None = None
 
     def get_file_tree(self) -> dict[str, Any]:
         """Generate hierarchical file tree for sidebar."""
@@ -75,14 +75,14 @@ class DirectoryListing:
 class RenderConfig:
     """Configuration for Markdown renderer."""
 
-    extensions: list[str] = field(default_factory=list)  # Markdown extensions to enable
-    extension_configs: dict[str, Any] = field(default_factory=dict)  # Extension-specific settings
-    syntax_theme: str = "monokai"  # Pygments theme name
-    enable_toc: bool = True  # Generate table of contents
-    toc_depth: int = 3  # Max heading level for TOC (1-6)
-    enable_math: bool = True  # Enable MathJax rendering
-    enable_mermaid: bool = True  # Enable Mermaid diagrams
-    enable_emoji: bool = True  # Enable emoji shortcodes
+    extensions: list[str] = field(default_factory=list)
+    extension_configs: dict[str, Any] = field(default_factory=dict)
+    syntax_theme: str = "monokai"
+    enable_toc: bool = True
+    toc_depth: int = 3
+    enable_math: bool = True
+    enable_mermaid: bool = True
+    enable_emoji: bool = True
 
     @classmethod
     def default(cls) -> "RenderConfig":
@@ -176,14 +176,14 @@ class RenderConfig:
 class ServerConfig:
     """Configuration for web server."""
 
-    host: str = "127.0.0.1"  # Bind address
-    port: int = 8000  # Port number
-    serve_path: Path = Path(".")  # Root directory or file to serve
-    theme: str = "light"  # UI theme name
-    open_browser: bool = True  # Auto-open browser on start
-    reload_enabled: bool = True  # Enable live reload
-    allow_write: bool = False  # Allow write operations
-    log_level: str = "INFO"  # Logging level
+    host: str = "127.0.0.1"
+    port: int = 8000
+    serve_path: Path = Path(".")
+    theme: str = "light"
+    open_browser: bool = True
+    reload_enabled: bool = True
+    allow_write: bool = False
+    log_level: str = "INFO"
 
     def validate(self) -> None:
         """Validate configuration values."""
@@ -199,9 +199,9 @@ class ServerConfig:
 class WatcherEvent:
     """Represents a file system event from the watcher."""
 
-    event_type: str  # created, modified, deleted, moved
-    file_path: Path  # Absolute path to affected file
-    timestamp: float  # Event timestamp
+    event_type: str
+    file_path: Path
+    timestamp: float
 
     def is_markdown_file(self) -> bool:
         """Check if event is for a Markdown file."""
@@ -219,10 +219,10 @@ class WatcherEvent:
 class WebSocketConnection:
     """Represents an active WebSocket connection for live reload."""
 
-    client_id: str  # Unique client identifier
-    websocket: Any  # WebSocket instance (FastAPI WebSocket)
-    watched_paths: set[Path] = field(default_factory=set)  # Files client is watching
-    last_ping: float = 0.0  # Last ping timestamp
+    client_id: str
+    websocket: Any
+    watched_paths: set[Path] = field(default_factory=set)
+    last_ping: float = 0.0
 
     async def send_reload(self, path: Path | None = None) -> None:
         """Send reload message to client."""
@@ -234,7 +234,7 @@ class WebSocketConnection:
                 }
             )
         except Exception:
-            pass  # Connection may be closed
+            pass
 
     async def send_error(self, message: str) -> None:
         """Send error message to client."""
@@ -246,18 +246,18 @@ class WebSocketConnection:
                 }
             )
         except Exception:
-            pass  # Connection may be closed
+            pass
 
 
 @dataclass
 class ExportConfig:
     """Configuration for static HTML export."""
 
-    source_path: Path  # Source file or directory
-    output_dir: Path  # Output directory for exported files
-    theme: str = "light"  # Theme to use for export
-    use_cdn: bool = True  # Use CDN for libraries (MathJax, Mermaid)
-    minify_html: bool = False  # Minify exported HTML
+    source_path: Path
+    output_dir: Path
+    theme: str = "light"
+    use_cdn: bool = True
+    minify_html: bool = False
 
     def validate(self) -> None:
         """Validate export configuration."""

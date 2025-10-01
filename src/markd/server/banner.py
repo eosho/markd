@@ -22,7 +22,11 @@ TAGLINE = "Python-based Markdown Preview Server with Live Reload"
 
 
 def print_banner(
-    host: str, port: int, serve_path: Path, theme: str, reload_enabled: bool = True
+    host: str,
+    port: int,
+    serve_path: Path,
+    theme: str,
+    reload_enabled: bool = True,
 ) -> None:
     """Display the ASCII art banner with server information.
 
@@ -66,7 +70,7 @@ def print_banner(
 
     info_content.append("🎨 ", style="bright_white")
     info_content.append("Theme:       ", style="dim")
-    info_content.append(theme.capitalize(), style="bright_magenta")
+    info_content.append(theme, style="bright_magenta")
     info_content.append("\n")
 
     info_content.append("🔄 ", style="bright_white")
