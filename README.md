@@ -21,18 +21,6 @@
 
 ## 📦 Installation
 
-### Using pip
-
-```bash
-pip install markd
-```
-
-### Using pipx (recommended)
-
-```bash
-pipx install markd
-```
-
 ### From source
 
 ```bash
@@ -198,18 +186,18 @@ Your theme preference is saved in browser localStorage.
 
 Syntax highlighting for 100+ languages using Pygments:
 
-\`\`\`python
+```python
 def hello_world():
     print("Hello from markd!")
-\`\`\`
+```
 
 ### Mermaid Diagrams
 
-\`\`\`mermaid
+```mermaid
 graph LR
     A[Start] --> B[Process]
     B --> C[End]
-\`\`\`
+```
 
 Supported diagram types:
 - Flowcharts
@@ -237,44 +225,7 @@ $$
 - **Footnotes**: Reference-style footnotes
 - **Emoji**: `:smile:` → 😊
 
-## 🏗️ Architecture
 
-markd follows a modular architecture with clear separation of concerns:
-
-```
-markd/
-├── cli/          # Typer-based command line interface
-├── server/       # FastAPI async web server + WebSocket
-│   ├── app.py           # Main application factory
-│   ├── websocket.py     # Live reload WebSocket handler
-│   └── banner.py        # Startup banner display
-├── renderer/     # python-markdown with extensions
-│   └── engine.py        # Markdown rendering engine
-├── watcher/      # watchdog file system monitoring
-│   └── observer.py      # File change detection
-├── exporter/     # Static HTML generation
-│   └── generator.py     # Export functionality
-├── security/     # Path validation and sanitization
-│   └── path_validator.py
-├── config/       # Configuration models
-│   ├── models.py        # Pydantic models
-│   └── settings.py      # Default settings
-├── templates/    # Jinja2 HTML templates
-│   ├── base.html
-│   ├── single.html
-│   ├── directory.html
-│   └── error.html
-└── static/       # CSS, JavaScript, assets
-    ├── css/
-    │   ├── main.css
-    │   └── themes/
-    │       ├── light.css
-    │       └── dark.css
-    └── js/
-        ├── reload.js     # WebSocket client
-        ├── theme.js      # Theme switcher
-        └── mermaid.js    # Diagram initialization
-```
 
 ## 🔧 Configuration
 
@@ -363,25 +314,6 @@ See `specs/001-python-based-markdown/` for detailed design documents:
 - **Debounced Reloading**: 150ms debounce prevents reload spam
 - **Lazy Loading**: Only load visible content in directory mode
 
-## 🔒 Security
-
-### Built-in Security Features
-
-1. **Path Validation**: Prevents directory traversal attacks (`../` blocked)
-2. **CSP Headers**: Content Security Policy prevents XSS
-3. **Read-Only**: Server cannot modify files on disk
-4. **Safe Rendering**: HTML is sanitized by python-markdown
-5. **HTTPS-Ready**: Works behind reverse proxy with TLS
-
-### Security Headers
-
-```
-X-Content-Type-Options: nosniff
-X-Frame-Options: DENY
-Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net
-Cache-Control: no-cache (for HTML), public max-age=31536000 (for assets)
-```
-
 ## 🐛 Troubleshooting
 
 ### Port Already in Use
@@ -425,17 +357,6 @@ Contributions are welcome! Please read [CONTRIBUTING.md](CONTRIBUTING.md) for gu
 ## 📄 License
 
 MIT License - see [LICENSE](LICENSE) file for details.
-
-## 🙏 Acknowledgments
-
-Built with excellent open-source tools:
-- [FastAPI](https://fastapi.tiangolo.com/) - Modern web framework
-- [python-markdown](https://python-markdown.github.io/) - Markdown parser
-- [Pygments](https://pygments.org/) - Syntax highlighting
-- [watchdog](https://github.com/gorakhargosh/watchdog) - File monitoring
-- [Typer](https://typer.tiangolo.com/) - CLI framework
-- [Rich](https://rich.readthedocs.io/) - Terminal formatting
-- [Mermaid](https://mermaid.js.org/) - Diagram rendering
 
 ## 📞 Support
 
