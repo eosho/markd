@@ -102,6 +102,21 @@ exclude = '''
 )/
 '''
 
+[tool.pyright]
+pythonVersion = "3.12"
+pythonPlatform = "All"
+venv = ".venv"
+typeCheckingMode = "standard"
+include = [
+    "src"
+]
+exclude = [
+    "**/__pycache__",
+    ".pytest_cache",
+    ".ruff_cache",
+    ".venv"
+]
+
 [tool.mypy]
 python_version = "3.10"
 strict = true

@@ -3,10 +3,13 @@ name: Lint
 on:
   push:
     branches:
-      - main
+      - '**'  # Run on all branches
     tags-ignore:
-      - '**'
+      - '**'  # Ignore tag pushes (handled by release workflow)
   pull_request:
+    branches:
+      - main
+      - develop
   workflow_call:
 
 jobs:
