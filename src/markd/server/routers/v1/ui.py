@@ -155,7 +155,6 @@ async def view_file(
 
         # File existence check is performed inside validate_path
 
-
         # For markdown files, render normally
         if abs_path.suffix.lower() in (".md", ".markdown"):
             content = abs_path.read_text(encoding="utf-8")

@@ -167,7 +167,6 @@ def validate_path(requested_path: Path | str, root_path: Path) -> Path:
         if not abs_requested.exists():
             raise FileNotFoundError(f"Path not found: {requested_path}")
 
-        # Only return the fully resolved path (symlinks resolved), which is guaranteed to be within root
         return real_path
 
     except ValueError as e:
