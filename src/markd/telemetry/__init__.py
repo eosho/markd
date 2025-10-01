@@ -41,10 +41,15 @@ def track_error() -> None:
         _telemetry_client.track_error()
 
 
-def flush() -> None:
-    """Flush pending telemetry data."""
+def flush() -> bool:
+    """Flush pending telemetry data.
+    
+    Returns:
+        bool: True if data was processed and sent, False if no action taken.
+    """
     if _telemetry_client:
-        _telemetry_client.flush()
+        return _telemetry_client.flush()
+    return False
 
 
 __all__ = [

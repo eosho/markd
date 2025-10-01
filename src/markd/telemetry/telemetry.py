@@ -144,18 +144,21 @@ class TelemetryClient:
         self._errors += 1
         self._maybe_flush()
 
-    def flush(self) -> None:
+    def flush(self) -> bool:
         """
         Build and send a telemetry payload with current metrics.
 
         This will reset in-memory counters after attempting to send.
         The client will fail silently if the network is unavailable.
+        
+        Returns:
+            bool: True if data was processed and sent, False if no action taken.
         """
         if not self.is_enabled():
-            return
+            return False
 
         if not self._renders and self._errors == 0:
-            return
+            return False
 
         avg_latency = None
         if self._renders:
@@ -184,6 +187,8 @@ class TelemetryClient:
         self._errors = 0
         self.state.last_sent = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
         self._save()
+        
+        return True
 
     # -----------------------
     # Internal helpers
@@ -226,8 +231,10 @@ class TelemetryClient:
         """
         now = time.time()
         if now - self._last_flush > self.FLUSH_INTERVAL:
-            self._last_flush = now
             try:
-                self.flush()
+                success = self.flush()
+                # Only update _last_flush if flush actually processed data
+                if success:
+                    self._last_flush = now
             except Exception:
                 pass
