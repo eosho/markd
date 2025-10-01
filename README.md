@@ -219,7 +219,7 @@ Configure via command-line options or environment variables:
 | Log Level | `--log-level` | `LOG_LEVEL` | `INFO` |### Browser Configuration
 
 Themes are stored in browser `localStorage`:
-- Key: `--theme`
+- Key: `markdpy-theme`
 - Values: `light` | `dark`
 
 ## 🧪 Development
