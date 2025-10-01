@@ -91,10 +91,7 @@ def validate_path(requested_path: Path | str, root_path: Path) -> Path:
     """
     # Get the original string representation before Path normalization
     if isinstance(requested_path, str):
-        path_str = requested_path
         requested_path = Path(requested_path)
-    else:
-        path_str = str(requested_path)
 
     # Reject outright if the path is absolute
     if requested_path.is_absolute():
