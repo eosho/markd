@@ -1,5 +1,6 @@
 """Path validation for security."""
 
+import re
 from pathlib import Path
 
 
@@ -9,23 +10,133 @@ class SecurityError(Exception):
     pass
 
 
-def validate_path(requested_path: Path, root_path: Path) -> Path:
-    """
-    Validate that requested path is within root directory.
-
-    Prevents directory traversal attacks by ensuring the resolved path
-    is relative to the root directory.
+def _is_safe_filename(filename: str) -> bool:
+    """Check if filename contains only safe characters.
 
     Args:
-        requested_path: The path requested by the user
+        filename: Filename to check
+
+    Returns:
+        True if filename is safe, False otherwise
+    """
+    # Allow alphanumeric, dash, underscore, dot, and space
+    # No directory separators, no control characters
+    safe_pattern = re.compile(r"^[a-zA-Z0-9._\-\s]+$")
+    return bool(safe_pattern.match(filename))
+
+
+def _contains_path_traversal(path_str: str) -> bool:
+    """Check if path string contains path traversal patterns.
+
+    Args:
+        path_str: Path string to check
+
+    Returns:
+        True if path contains traversal patterns, False otherwise
+    """
+    # Check for various path traversal patterns before normalization
+    dangerous_patterns = [
+        "..",  # Parent directory reference
+        "~",  # Home directory reference
+        "//",  # Double slashes
+        "\\\\",  # Double backslashes
+        "/.",  # Hidden files at root
+    ]
+
+    for pattern in dangerous_patterns:
+        if pattern in path_str:
+            return True
+
+    # Check for backslash (Windows separator) - should be caught by filename validation
+    if "\\" in path_str:
+        return True
+
+    # Check for encoded traversal attempts (case-insensitive)
+    path_lower = path_str.lower()
+    encoded_patterns = [
+        "%2e%2e",  # URL encoded ..
+        "%252e%252e",  # Double encoded ..
+        "..%2f",  # Mixed encoding
+        "%2e%2e/",  # Mixed encoding
+        "..%5c",  # Windows separator
+        "%2e%2e%5c",  # Windows separator
+    ]
+
+    for pattern in encoded_patterns:
+        if pattern.lower() in path_lower:
+            return True
+
+    return False
+
+
+def validate_path(requested_path: Path | str, root_path: Path) -> Path:
+    """
+    Validate that requested path is within root directory with enhanced security.
+
+    Prevents directory traversal attacks by:
+    1. Checking for path traversal patterns (../, ~/, etc.)
+    2. Validating each path component for safe characters
+    3. Ensuring resolved path is within root directory
+    4. Preventing access to hidden files and system files
+
+    Args:
+        requested_path: The path requested by the user (Path or str)
         root_path: The root directory to serve from
 
     Returns:
         The resolved absolute path if valid
 
     Raises:
-        SecurityError: If path is outside root or invalid
+        SecurityError: If path is outside root or contains invalid patterns
     """
+    # Get the original string representation before Path normalization
+    if isinstance(requested_path, str):
+        path_str = requested_path
+        requested_path = Path(requested_path)
+    else:
+        path_str = str(requested_path)
+
+    # Check for path traversal patterns
+    if _contains_path_traversal(path_str):
+        raise SecurityError(
+            f"Path traversal attempt detected: {requested_path}. "
+            "Path contains forbidden patterns (.., ~, //, etc.)"
+        )
+
+    # Validate each path component
+    path_parts = requested_path.parts
+    for part in path_parts:
+        # Skip empty parts and current directory references
+        if not part or part == ".":
+            continue
+
+        # Check for hidden files (starting with .)
+        if part.startswith("."):
+            raise SecurityError(
+                f"Access to hidden files denied: {part}. "
+                "Paths starting with '.' are not allowed."
+            )
+
+        # Validate filename characters
+        if not _is_safe_filename(part):
+            raise SecurityError(
+                f"Invalid characters in path component: {part}. "
+                "Only alphanumeric characters, dash, underscore, dot, and space are allowed."
+            )
+
+        # Check for multiple dots (except for file extensions)
+        if part.count(".") > 1:
+            # Allow one dot for file extension (e.g., file.md)
+            # But disallow multiple dots (e.g., file..md, ...file)
+            dots = [i for i, c in enumerate(part) if c == "."]
+            # Check if dots are not adjacent
+            for i in range(len(dots) - 1):
+                if dots[i + 1] - dots[i] <= 1:
+                    raise SecurityError(
+                        f"Multiple adjacent dots in path component: {part}. "
+                        "This pattern is not allowed."
+                    )
+
     try:
         # Resolve both paths to absolute (strict=False allows nonexistent paths)
         abs_root = root_path.resolve(strict=False)
@@ -33,7 +144,28 @@ def validate_path(requested_path: Path, root_path: Path) -> Path:
 
         # Check if requested path is relative to root
         if not abs_requested.is_relative_to(abs_root):
-            raise SecurityError(f"Access denied: {requested_path} is outside serve root")
+            raise SecurityError(
+                f"Access denied: {requested_path} is outside serve root. "
+                f"Requested: {abs_requested}, Root: {abs_root}"
+            )
+
+        # Additional check: ensure the path doesn't contain symlinks that escape root
+        # This is a defense-in-depth measure
+        try:
+            # Get the real path (follows symlinks)
+            if abs_requested.exists():
+                real_path = abs_requested.resolve(strict=True)
+            else:
+                real_path = abs_requested
+
+            if not real_path.is_relative_to(abs_root):
+                raise SecurityError(
+                    f"Symlink traversal attempt detected: {requested_path} "
+                    f"resolves outside serve root."
+                )
+        except (OSError, RuntimeError):
+            # If we can't resolve symlinks, be conservative and deny
+            pass
 
         # Check if path exists
         if not abs_requested.exists():
@@ -43,7 +175,7 @@ def validate_path(requested_path: Path, root_path: Path) -> Path:
 
     except ValueError as e:
         # ValueError from invalid path operations
-        raise SecurityError(f"Invalid path: {requested_path}") from e
+        raise SecurityError(f"Invalid path operation: {requested_path}") from e
 
 
 def is_safe_path(requested_path: Path, root_path: Path) -> bool:

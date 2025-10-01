@@ -66,7 +66,7 @@ def print_banner(
 
     info_content.append("🎨 ", style="bright_white")
     info_content.append("Theme:       ", style="dim")
-    info_content.append(theme.capitalize(), style="bright_magenta")
+    info_content.append(theme, style="bright_magenta")
     info_content.append("\n")
 
     info_content.append("🔄 ", style="bright_white")
