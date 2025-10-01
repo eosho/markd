@@ -17,14 +17,14 @@ class TestCliExportCommand:
         source.write_text("# Test\n\nContent")
         output = tmp_path / "output"
         output.mkdir()
-        
+
         result = subprocess.run(
             [sys.executable, "-m", "markd.cli.main", "export", str(source), str(output)],
             capture_output=True,
             text=True,
             timeout=10,
         )
-        
+
         # May not be implemented yet
         assert result.returncode in (0, 1, 2) or "export" in result.stderr.lower()
 
@@ -34,17 +34,17 @@ class TestCliExportCommand:
         source.mkdir()
         (source / "test1.md").write_text("# Test 1")
         (source / "test2.md").write_text("# Test 2")
-        
+
         output = tmp_path / "output"
         output.mkdir()
-        
+
         result = subprocess.run(
             [sys.executable, "-m", "markd.cli.main", "export", str(source), str(output)],
             capture_output=True,
             text=True,
             timeout=10,
         )
-        
+
         assert result.returncode in (0, 1, 2)
 
     def test_minify_option_works(self, tmp_path: Path) -> None:
@@ -53,7 +53,7 @@ class TestCliExportCommand:
         source.write_text("# Test")
         output = tmp_path / "output"
         output.mkdir()
-        
+
         result = subprocess.run(
             [
                 sys.executable,
@@ -68,21 +68,21 @@ class TestCliExportCommand:
             text=True,
             timeout=10,
         )
-        
+
         assert result.returncode in (0, 1, 2)
 
     def test_invalid_source_exits_3(self, tmp_path: Path) -> None:
         """Test that invalid source path exits with code 3."""
         nonexistent = tmp_path / "nonexistent.md"
         output = tmp_path / "output"
-        
+
         result = subprocess.run(
             [sys.executable, "-m", "markd.cli.main", "export", str(nonexistent), str(output)],
             capture_output=True,
             text=True,
             timeout=10,
         )
-        
+
         # Should fail with error
         assert result.returncode != 0 or "not found" in result.stderr.lower()
 
@@ -92,7 +92,7 @@ class TestCliExportCommand:
         source.write_text("# Test")
         output = tmp_path / "output"
         output.mkdir()
-        
+
         result = subprocess.run(
             [
                 sys.executable,
@@ -108,7 +108,7 @@ class TestCliExportCommand:
             text=True,
             timeout=10,
         )
-        
+
         assert result.returncode in (0, 1, 2)
 
     def test_export_help_shows_options(self) -> None:
@@ -119,7 +119,7 @@ class TestCliExportCommand:
             text=True,
             timeout=5,
         )
-        
+
         if result.returncode == 0:
             # Should mention export functionality
             assert "export" in result.stdout.lower() or "source" in result.stdout.lower()

@@ -2,7 +2,6 @@
 
 import shutil
 from pathlib import Path
-from typing import Optional
 
 from markd.renderer import MarkdownRenderer
 
@@ -12,7 +11,7 @@ class StaticSiteGenerator:
 
     def __init__(
         self,
-        renderer: Optional[MarkdownRenderer] = None,
+        renderer: MarkdownRenderer | None = None,
         theme: str = "light",
         minify: bool = False,
     ) -> None:
@@ -29,7 +28,7 @@ class StaticSiteGenerator:
         self.minify = minify
 
     def export_file(
-        self, source: Path, output_dir: Path, relative_path: Optional[Path] = None
+        self, source: Path, output_dir: Path, relative_path: Path | None = None
     ) -> Path:
         """
         Export a single Markdown file to HTML.
@@ -49,7 +48,7 @@ class StaticSiteGenerator:
         if not source.exists():
             raise FileNotFoundError(f"Source file not found: {source}")
 
-        if not source.suffix.lower() in (".md", ".markdown"):
+        if source.suffix.lower() not in (".md", ".markdown"):
             raise ValueError(f"Not a Markdown file: {source}")
 
         # Determine output path
@@ -115,8 +114,8 @@ class StaticSiteGenerator:
             output_file = self.export_file(md_file, output_dir, relative_path)
             exported_files.append(output_file)
 
-        # Copy static assets if they exist
-        static_dir = Path(__file__).parent.parent / "static"
+        # Copy static assets if they exist (now in root directory)
+        static_dir = Path(__file__).parent.parent.parent.parent / "static"
         if static_dir.exists():
             output_static = output_dir / "static"
             if output_static.exists():
@@ -125,9 +124,7 @@ class StaticSiteGenerator:
 
         return exported_files
 
-    def _create_html_document(
-        self, title: str, content: str, theme: str = "light"
-    ) -> str:
+    def _create_html_document(self, title: str, content: str, theme: str = "light") -> str:
         """
         Create a standalone HTML document.
 

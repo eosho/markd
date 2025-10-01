@@ -33,9 +33,7 @@ def validate_path(requested_path: Path, root_path: Path) -> Path:
 
         # Check if requested path is relative to root
         if not abs_requested.is_relative_to(abs_root):
-            raise SecurityError(
-                f"Access denied: {requested_path} is outside serve root"
-            )
+            raise SecurityError(f"Access denied: {requested_path} is outside serve root")
 
         # Check if path exists
         if not abs_requested.exists():

@@ -1,6 +1,5 @@
 """CLI main entry point using Typer."""
 
-import sys
 import webbrowser
 from pathlib import Path
 
@@ -8,7 +7,7 @@ import typer
 import uvicorn
 from rich.console import Console
 
-from markd.config.models import ServerConfig, VALID_THEMES
+from markd.config.models import VALID_THEMES, ServerConfig
 from markd.config.settings import DEFAULT_HOST, DEFAULT_PORT, DEFAULT_THEME
 
 app = typer.Typer(
@@ -99,7 +98,7 @@ def serve(
             port=port,
             serve_path=config.serve_path,
             theme=config.theme,
-            reload_enabled=config.reload_enabled
+            reload_enabled=config.reload_enabled,
         )
 
         # Open browser if requested
@@ -218,6 +217,7 @@ def main() -> None:
 
     def create_app_factory() -> "fastapi.FastAPI":  # type: ignore # noqa: F821
         from markd.server.app import create_app
+
         return create_app(_config) if _config else create_app(ServerConfig())
 
     app()

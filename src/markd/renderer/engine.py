@@ -2,10 +2,8 @@
 
 from functools import lru_cache
 from pathlib import Path
-from typing import Any
 
 import markdown
-from markdown.extensions import Extension
 
 from markd.config.models import RenderConfig
 from markd.renderer.link_processor import LinkProcessorExtension
@@ -16,7 +14,7 @@ class MarkdownRenderer:
 
     def __init__(self, config: RenderConfig | None = None, base_path: Path | None = None) -> None:
         """Initialize renderer with configuration.
-        
+
         Args:
             config: Render configuration
             base_path: Base path for resolving relative links
@@ -29,7 +27,7 @@ class MarkdownRenderer:
         """Create configured markdown instance."""
         # Add our custom link processor extension
         link_processor = LinkProcessorExtension(base_path=self.base_path)
-        
+
         return markdown.Markdown(
             extensions=self.config.extensions + [link_processor],
             extension_configs=self.config.extension_configs,

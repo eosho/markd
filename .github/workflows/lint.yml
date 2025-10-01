@@ -1,0 +1,38 @@
+name: Lint
+
+on:
+  push:
+    branches:
+      - '**'  # Run on all branches
+    tags-ignore:
+      - '**'  # Ignore tag pushes (handled by release workflow)
+  pull_request:
+    branches:
+      - main
+      - develop
+  workflow_call:
+
+jobs:
+  ruff:
+    name: Ruff linting and uv lock
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+      - name: Install dependencies
+        run: uv sync --all-extras
+      - run: uv run pre-commit run --all-files --show-diff-on-failure
+
+  pyright:
+    name: Pyright type checking
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+      - name: Install dependencies
+        run: uv sync --all-extras
+      - run: uv run pyright

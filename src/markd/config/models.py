@@ -43,9 +43,7 @@ class DirectoryListing:
     path: Path  # Absolute directory path
     relative_path: Path  # Path relative to serve root
     files: list[MarkdownFile] = field(default_factory=list)  # Markdown files in directory
-    subdirectories: list["DirectoryListing"] = field(
-        default_factory=list
-    )  # Nested directories
+    subdirectories: list["DirectoryListing"] = field(default_factory=list)  # Nested directories
     index_file: MarkdownFile | None = None  # index.md or README.md if present
 
     def get_file_tree(self) -> dict[str, Any]:
@@ -78,9 +76,7 @@ class RenderConfig:
     """Configuration for Markdown renderer."""
 
     extensions: list[str] = field(default_factory=list)  # Markdown extensions to enable
-    extension_configs: dict[str, Any] = field(
-        default_factory=dict
-    )  # Extension-specific settings
+    extension_configs: dict[str, Any] = field(default_factory=dict)  # Extension-specific settings
     syntax_theme: str = "monokai"  # Pygments theme name
     enable_toc: bool = True  # Generate table of contents
     toc_depth: int = 3  # Max heading level for TOC (1-6)
@@ -90,90 +86,90 @@ class RenderConfig:
 
     @classmethod
     def default(cls) -> "RenderConfig":
-      """Create default configuration with rich Markdown + pymdownx support."""
-      return cls(
-        extensions = [
-            # --- Core markdown extensions ---
-            "markdown.extensions.abbr",
-            "markdown.extensions.attr_list",
-            "markdown.extensions.def_list",
-            "markdown.extensions.footnotes",
-            "markdown.extensions.meta",
-            "markdown.extensions.sane_lists",
-            "markdown.extensions.smarty",
-            "markdown.extensions.tables",
-            "markdown.extensions.nl2br",
-            "markdown.extensions.fenced_code",
-            "markdown.extensions.codehilite",
-            "markdown.extensions.toc",
-
-            # --- pymdownx extensions ---
-            "pymdownx.highlight",
-            "pymdownx.inlinehilite",
-            "pymdownx.superfences",
-            "pymdownx.tasklist",
-            "pymdownx.emoji",
-            "pymdownx.mark",
-            "pymdownx.tilde",
-            "pymdownx.caret",
-            "pymdownx.details",
-            "pymdownx.keys",
-            "pymdownx.magiclink",
-            "pymdownx.progressbar",
-            "pymdownx.snippets",
-            "pymdownx.escapeall",
-            "pymdownx.arithmatex",
-        ],
-
-        extension_configs = {
-            "codehilite": {
-                "css_class": "highlight",
-                "guess_lang": False,
-                "linenums": False,
-                "noinlinestyles": True,
+        """Create default configuration with rich Markdown + pymdownx support."""
+        return cls(
+            extensions=[
+                # --- Core markdown extensions ---
+                "markdown.extensions.abbr",
+                "markdown.extensions.attr_list",
+                "markdown.extensions.def_list",
+                "markdown.extensions.footnotes",
+                "markdown.extensions.meta",
+                "markdown.extensions.sane_lists",
+                "markdown.extensions.smarty",
+                "markdown.extensions.tables",
+                "markdown.extensions.nl2br",
+                "markdown.extensions.fenced_code",
+                "markdown.extensions.codehilite",
+                "markdown.extensions.toc",
+                # --- pymdownx extensions ---
+                "pymdownx.highlight",
+                "pymdownx.inlinehilite",
+                "pymdownx.superfences",
+                "pymdownx.tasklist",
+                "pymdownx.emoji",
+                "pymdownx.mark",
+                "pymdownx.tilde",
+                "pymdownx.caret",
+                "pymdownx.details",
+                "pymdownx.keys",
+                "pymdownx.magiclink",
+                "pymdownx.progressbar",
+                "pymdownx.snippets",
+                "pymdownx.escapeall",
+                "pymdownx.arithmatex",
+            ],
+            extension_configs={
+                "codehilite": {
+                    "css_class": "highlight",
+                    "guess_lang": False,
+                    "linenums": False,
+                    "noinlinestyles": True,
+                },
+                "toc": {
+                    "permalink": True,
+                    "baselevel": 1,
+                },
+                "pymdownx.tasklist": {
+                    "custom_checkbox": True,
+                },
+                "pymdownx.emoji": {
+                    "emoji_generator": "github",
+                },
+                "pymdownx.magiclink": {
+                    "repo_url_shortener": True,
+                    "hide_protocol": True,
+                },
+                "pymdownx.highlight": {
+                    "anchor_linenums": False,
+                    "use_pygments": True,
+                    "pygments_lang_class": True,
+                },
+                "pymdownx.arithmatex": {
+                    "generic": True,  # works with MathJax/KaTeX
+                },
+                "pymdownx.snippets": {
+                    "check_paths": True,
+                },
+                "pymdownx.superfences": {
+                    "custom_fences": [
+                        {
+                            "name": "mermaid",
+                            "class": "mermaid",
+                            "format": lambda src,
+                            *args,
+                            **kwargs: f'<div class="mermaid">{src}</div>',
+                        }
+                    ]
+                },
             },
-            "toc": {
-                "permalink": True,
-                "baselevel": 1,
-            },
-            "pymdownx.tasklist": {
-                "custom_checkbox": True,
-            },
-            "pymdownx.emoji": {
-                "emoji_generator": "github",
-            },
-            "pymdownx.magiclink": {
-                "repo_url_shortener": True,
-                "hide_protocol": True,
-            },
-            "pymdownx.highlight": {
-                "anchor_linenums": False,
-                "use_pygments": True,
-                "pygments_lang_class": True,
-            },
-            "pymdownx.arithmatex": {
-                "generic": True,  # works with MathJax/KaTeX
-            },
-            "pymdownx.snippets": {
-                "check_paths": True,
-            },
-            "pymdownx.superfences": {
-                "custom_fences": [
-                    {
-                        "name": "mermaid",
-                        "class": "mermaid",
-                        "format": lambda src, *args, **kwargs: f'<div class="mermaid">{src}</div>',
-                    }
-                ]
-            }
-        },
-        syntax_theme="monokai",
-        enable_toc=True,
-        toc_depth=3,
-        enable_math=True,
-        enable_mermaid=True,
-        enable_emoji=True,
-      )
+            syntax_theme="monokai",
+            enable_toc=True,
+            toc_depth=3,
+            enable_math=True,
+            enable_mermaid=True,
+            enable_emoji=True,
+        )
 
 
 @dataclass
@@ -231,20 +227,24 @@ class WebSocketConnection:
     async def send_reload(self, path: Path | None = None) -> None:
         """Send reload message to client."""
         try:
-            await self.websocket.send_json({
-                "type": "reload",
-                "path": str(path) if path else None,
-            })
+            await self.websocket.send_json(
+                {
+                    "type": "reload",
+                    "path": str(path) if path else None,
+                }
+            )
         except Exception:
             pass  # Connection may be closed
 
     async def send_error(self, message: str) -> None:
         """Send error message to client."""
         try:
-            await self.websocket.send_json({
-                "type": "error",
-                "message": message,
-            })
+            await self.websocket.send_json(
+                {
+                    "type": "error",
+                    "message": message,
+                }
+            )
         except Exception:
             pass  # Connection may be closed
 
