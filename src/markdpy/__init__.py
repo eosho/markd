@@ -1,6 +1,6 @@
 """markdpy: Python-based Markdown preview server."""
 
-__version__ = "1.0.2"
+__version__ = "0.1.0"
 __author__ = "markdpy contributors"
 __license__ = "MIT"
 
