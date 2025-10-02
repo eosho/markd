@@ -11,7 +11,6 @@
 
 Python-based markdown preview server with live reload, themes, diagrams, and static export capabilities.
 
-[![Pytest](https://img.shields.io/badge/Pytest-fff?logo=pytest&labelColor=black&color=%237B2CBF)](#)
 [![GitHub Release](https://img.shields.io/github/v/release/eosho/markdpy?sytle=flat&label=Release&labelColor=black&color=%237B2CBF)](https://github.com/eosho/markdpy/releases)
 [![GitHub License](https://img.shields.io/github/license/eosho/markdpy?style=flat&label=License&labelColor=black&color=%237B2CBF)](LICENSE)
 [![GitHub Repo stars](https://img.shields.io/github/stars/eosho/markdpy?style=flat&logo=github&logoColor=white&label=Stars&labelColor=black&color=7B2CBF)](https://github.com/eosho/markdpy)
@@ -31,7 +30,13 @@ Python-based markdown preview server with live reload, themes, diagrams, and sta
 
 ## 📦 Installation
 
-### From source
+### From PyPI (Recommended)
+
+```bash
+pip install markdpy
+```
+
+### From Source
 
 ```bash
 git clone https://github.com/eosho/markdpy.git
