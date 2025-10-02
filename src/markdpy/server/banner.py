@@ -37,6 +37,7 @@ def print_banner(
         serve_path: Path being served
         theme: Active theme name
         reload_enabled: Whether live reload is enabled
+        telemetry_enabled: Whether telemetry is enabled
     """
     # Create gradient effect with different colors
     banner_lines = BANNER.strip().split("\n")
