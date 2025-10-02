@@ -184,6 +184,7 @@ class ServerConfig:
     reload_enabled: bool = True
     allow_write: bool = False
     log_level: str = "INFO"
+    telemetry_enabled: bool = True
 
     def validate(self) -> None:
         """Validate configuration values."""

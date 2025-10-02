@@ -59,6 +59,11 @@ def serve(
         "--no-reload",
         help="Disable live reload",
     ),
+    no_telemetry: bool = typer.Option(
+        False,
+        "--no-telemetry",
+        help="Disable telemetry",
+    ),
     log_level: str = typer.Option(
         "INFO",
         "--log-level",
@@ -84,6 +89,7 @@ def serve(
             reload_enabled=not no_reload,
             allow_write=False,
             log_level=log_level,
+            telemetry_enabled=not no_telemetry,
         )
 
         # Validate config
@@ -102,6 +108,7 @@ def serve(
             serve_path=config.serve_path,
             theme=config.theme,
             reload_enabled=config.reload_enabled,
+            telemetry_enabled=config.telemetry_enabled,
         )
 
         # Open browser if requested

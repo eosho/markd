@@ -27,6 +27,7 @@ def print_banner(
     serve_path: Path,
     theme: str,
     reload_enabled: bool = True,
+    telemetry_enabled: bool = True,
 ) -> None:
     """Display the ASCII art banner with server information.
 
@@ -36,6 +37,7 @@ def print_banner(
         serve_path: Path being served
         theme: Active theme name
         reload_enabled: Whether live reload is enabled
+        telemetry_enabled: Whether telemetry is enabled
     """
     # Create gradient effect with different colors
     banner_lines = BANNER.strip().split("\n")
@@ -78,6 +80,13 @@ def print_banner(
     reload_status = "enabled" if reload_enabled else "disabled"
     reload_style = "bright_cyan bold" if reload_enabled else "yellow"
     info_content.append(reload_status, style=reload_style)
+    info_content.append("\n")
+
+    info_content.append("📊 ", style="bright_white")
+    info_content.append("Telemetry:   ", style="dim")
+    telemetry_status = "enabled" if telemetry_enabled else "disabled"
+    telemetry_style = "bright_cyan bold" if telemetry_enabled else "yellow"
+    info_content.append(telemetry_status, style=telemetry_style)
 
     console.print(
         Panel(
