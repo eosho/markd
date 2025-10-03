@@ -55,10 +55,10 @@ def setup_app_state(app: FastAPI, config: ServerConfig) -> None:
 
     # Setup templates - now in package directory
     package_dir = Path(__file__).parent.parent  # markdpy/server/utils -> markdpy
-    templates_path = package_dir / 'templates'
+    templates_path = package_dir / "templates"
     app.state.templates = Jinja2Templates(directory=str(templates_path))
 
     # Mount static files - now in package directory
-    static_path = package_dir / 'static'
+    static_path = package_dir / "static"
     if static_path.exists():
         app.mount("/static", StaticFiles(directory=str(static_path)), name="static")
