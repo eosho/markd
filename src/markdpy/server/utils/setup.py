@@ -54,7 +54,8 @@ def setup_app_state(app: FastAPI, config: ServerConfig) -> None:
         app.state.file_observer = observer
 
     # Setup templates - now in package directory
-    package_dir = Path(__file__).parent.parent  # markdpy/server/utils -> markdpy
+    # Path: markdpy/server/utils/setup.py -> markdpy/server/utils -> markdpy/server -> markdpy
+    package_dir = Path(__file__).parent.parent.parent
     templates_path = package_dir / "templates"
     app.state.templates = Jinja2Templates(directory=str(templates_path))
 
