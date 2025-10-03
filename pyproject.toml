@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "markdpy"
-version = "0.1.1"
+version = "0.1.2"
 description = "Python-based markdown preview server with live reload, themes, and static export"
 readme = "README.md"
 requires-python = ">=3.10"
@@ -61,19 +61,6 @@ Issues = "https://github.com/eosho/markdpy/issues"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/markdpy"]
-
-[tool.hatch.build.targets.wheel.force-include]
-"static" = "markdpy/static"
-"templates" = "markdpy/templates"
-
-[tool.hatch.build.targets.sdist]
-include = [
-    "/src",
-    "/static",
-    "/templates",
-    "/README.md",
-    "/LICENSE",
-]
 
 [tool.ruff]
 line-length = 100

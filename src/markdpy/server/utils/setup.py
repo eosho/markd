@@ -53,13 +53,12 @@ def setup_app_state(app: FastAPI, config: ServerConfig) -> None:
         )
         app.state.file_observer = observer
 
-    # Setup Jinja2 templates (located in project root/templates)
-    # Navigate from src/markdpy/server/utils/setup.py -> project root
-    project_root = Path(__file__).resolve().parents[4]
-    templates_dir = project_root / "templates"
-    app.state.templates = Jinja2Templates(directory=str(templates_dir))
+    # Setup templates - now in package directory
+    package_dir = Path(__file__).parent.parent  # markdpy/server/utils -> markdpy
+    templates_path = package_dir / 'templates'
+    app.state.templates = Jinja2Templates(directory=str(templates_path))
 
-    # Mount static files
-    static_dir = project_root / "static"
-    if static_dir.exists():
-        app.mount("/static", StaticFiles(directory=str(static_dir)), name="static")
+    # Mount static files - now in package directory
+    static_path = package_dir / 'static'
+    if static_path.exists():
+        app.mount("/static", StaticFiles(directory=str(static_path)), name="static")
